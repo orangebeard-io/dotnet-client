@@ -1,8 +1,8 @@
 <h1 align="center">
-  <a href="https://github.com/orangebeard-io/java-client">
-    <img src="https://raw.githubusercontent.com/orangebeard-io/dotnet-client/master/.github/logo.svg" alt="Orangebeard.io Java Client" height="200">
+  <a href="https://github.com/orangebeard-io/dotnet-client">
+    <img src="https://raw.githubusercontent.com/orangebeard-io/dotnet-client/master/.github/logo.svg" alt="Orangebeard.io .Net Client" height="200">
   </a>
-  <br>Orangebeard.io Java Client<br>
+  <br>Orangebeard.io .Net Client<br>
 </h1>
 
 <h4 align="center">Orangebeard .Net client for .Net based Orangebeard Listeners.</h4>
