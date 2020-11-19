@@ -29,7 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Build\**\*.targets" Pack="true" PackagePath="build\" />
     <None Include="..\..\Logo.png" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 </Project>

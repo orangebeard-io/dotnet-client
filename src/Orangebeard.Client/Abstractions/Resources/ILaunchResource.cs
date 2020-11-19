@@ -84,9 +84,9 @@ namespace Orangebeard.Client.Abstractions.Resources
         /// <summary>
         /// Update specified launch.
         /// </summary>
-        /// <param name="id">ID of launch to update.</param>
+        /// <param name="uuid">UUID of launch to update.</param>
         /// <param name="request">Information about launch.</param>
         /// <returns>A message from service.</returns>
-        Task<MessageResponse> UpdateAsync(long id, UpdateLaunchRequest request);
+        Task<MessageResponse> UpdateAsync(string uuid, UpdateLaunchRequest request);
     }
 }

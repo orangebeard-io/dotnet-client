@@ -73,9 +73,9 @@ namespace Orangebeard.Client.Resources
             return PostAsJsonAsync<LaunchResponse, MergeLaunchesRequest>($"{ProjectName}/launch/merge", request);
         }
 
-        public Task<MessageResponse> UpdateAsync(long id, UpdateLaunchRequest request)
+        public Task<MessageResponse> UpdateAsync(string uuid, UpdateLaunchRequest request)
         {
-            return PutAsJsonAsync<MessageResponse, UpdateLaunchRequest>($"{ProjectName}/launch/{id}/update", request);
+            return PutAsJsonAsync<MessageResponse, UpdateLaunchRequest>($"{ProjectName}/launch/{uuid}/update", request);
         }
 
         public Task<MessageResponse> AnalyzeAsync(AnalyzeLaunchRequest request)

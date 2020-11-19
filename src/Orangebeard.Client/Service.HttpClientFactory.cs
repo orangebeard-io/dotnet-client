@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 
 namespace Orangebeard.Client
 {
-    partial class Service
+    partial class OrangebeardClient
     {
         class HttpClientFactory : IHttpClientFactory
         {

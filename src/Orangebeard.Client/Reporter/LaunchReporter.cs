@@ -163,6 +163,47 @@ namespace Orangebeard.Shared.Reporter
             }
         }
 
+        public Task UpdateTask { get; private set; }
+
+        public void Update (UpdateLaunchRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            TraceLogger.Verbose($"Scheduling request to update launch in {GetHashCode()} proxy instance");
+
+            if (StartTask == null)
+            {
+                var exp = new InsufficientExecutionStackException("The launch wasn't scheduled for starting to finish it properly.");
+                TraceLogger.Error(exp.ToString());
+                throw exp;
+            }
+
+            if (FinishTask != null)
+            {
+                var exp = new InsufficientExecutionStackException("The launch is already scheduled for finishing.");
+                TraceLogger.Error(exp.ToString());
+                throw exp;
+            }
+
+            var dependentTasks = new List<Task>();
+
+            dependentTasks.Add(StartTask);
+
+            if (_logsReporter != null)
+            {
+                dependentTasks.Add(_logsReporter.ProcessingTask);
+            }
+
+            if (_additionalTasks != null)
+            {
+                dependentTasks.AddRange(_additionalTasks);
+            }
+
+            UpdateTask = Task.Factory.ContinueWhenAll(dependentTasks.ToArray(), async (dts) =>
+                await _requestExecuter.ExecuteAsync(() => _service.Launch.UpdateAsync(Info.Uuid, request), null).ConfigureAwait(false));
+
+        }
+
         public Task FinishTask { get; private set; }
         public void Finish(FinishLaunchRequest request)
         {

@@ -1,5 +1,6 @@
 ﻿using Orangebeard.Client.Abstractions;
 using Orangebeard.Client.Abstractions.Resources;
+using Orangebeard.Client.OrangebeardProperties;
 using Orangebeard.Client.Resources;
 using System;
 #if NET45
@@ -10,27 +11,15 @@ using System.Net.Http;
 namespace Orangebeard.Client
 {
     /// <inheritdoc/>
-    public partial class Service : IClientService, IDisposable
+    public partial class OrangebeardClient : IClientService, IDisposable
     {
         private readonly HttpClient _httpClient;
 
-        /// <summary>
-        /// Constructor to initialize a new object of service.
-        /// </summary>
-        /// <param name="uri">Base URI for REST service.</param>
-        /// <param name="projectName">A project to manage.</param>
-        /// <param name="token">A token for user. Can be UID given from user's profile page.</param>
-        /// <param name="httpClientFactory">Factory object to create an instance of <see cref="HttpClient"/>.</param>
-        public Service(Uri uri, string projectName, string token, IHttpClientFactory httpClientFactory = null)
+        public OrangebeardClient(OrangebeardConfiguration config)
         {
-            ProjectName = projectName;
-
-            if (httpClientFactory == null)
-            {
-                httpClientFactory = new HttpClientFactory(uri, token);
-            }
-
-            _httpClient = httpClientFactory.Create();
+            ProjectName = config.ProjectName;
+            _httpClient = new HttpClientFactory(new Uri(config.Endpoint), config.AccessToken).Create();
+            
 
 #if NET45
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
@@ -44,6 +33,15 @@ namespace Orangebeard.Client
             UserFilter = new ServiceUserFilterResource(_httpClient, ProjectName);
             Project = new ServiceProjectResource(_httpClient, ProjectName);
         }
+
+        /// <summary>
+        /// Constructor to initialize a new object of service.
+        /// </summary>
+        /// <param name="uri">Base URI for REST service.</param>
+        /// <param name="projectName">A project to manage.</param>
+        /// <param name="token">A token for user. Can be UID given from user's profile page.</param>
+        /// <param name="httpClientFactory">Factory object to create an instance of <see cref="HttpClient"/>.</param>
+     
 
         /// <summary>
         /// Get or set project name to interact with.
