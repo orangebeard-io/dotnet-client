@@ -18,7 +18,7 @@ jobs:
       uses: nanzm/get-time-action@v1.1
       with:
         timeZone: 1
-        format: 'YYYY-MM-DD HH-mm-ss'
+        format: 'YYYY-MM-DD HH:mm'
     
     - uses: actions/checkout@v2
     
@@ -39,10 +39,9 @@ jobs:
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RELEASE_TIME: "${{ steps.time.outputs.time }}"
       with:
-        tag_name: $RELEASE_TIME
-        release_name: Release $RELEASE_TIME
+        tag_name: ${{ steps.time.outputs.time }}
+        release_name: Release ${{ steps.time.outputs.time }}
         draft: false
         prerelease: false
 
