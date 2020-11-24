@@ -15,6 +15,10 @@ namespace Orangebeard.Client
     {
         private readonly HttpClient _httpClient;
 
+        /// <summary>
+        /// Constructor to initialize a new object of the client.
+        /// </summary>
+        /// <param name="config">The configuration of the client.</param>
         public OrangebeardClient(OrangebeardConfiguration config)
         {
             ProjectName = config.ProjectName;
@@ -34,15 +38,7 @@ namespace Orangebeard.Client
             Project = new ServiceProjectResource(_httpClient, ProjectName);
         }
 
-        /// <summary>
-        /// Constructor to initialize a new object of service.
-        /// </summary>
-        /// <param name="uri">Base URI for REST service.</param>
-        /// <param name="projectName">A project to manage.</param>
-        /// <param name="token">A token for user. Can be UID given from user's profile page.</param>
-        /// <param name="httpClientFactory">Factory object to create an instance of <see cref="HttpClient"/>.</param>
-     
-
+       
         /// <summary>
         /// Get or set project name to interact with.
         /// </summary>
