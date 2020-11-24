@@ -13,6 +13,13 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
     
+    - name: Get Time
+      id: time
+      uses: nanzm/get-time-action@v1.1
+      with:
+        timeZone: 1
+        format: 'YYYY-MM-DD HH-mm-ss'
+    
     - uses: actions/checkout@v2
     
     - name: NuGet PKG Restore
@@ -24,7 +31,7 @@ jobs:
     - name: Archive Release
       uses: papeloto/action-zip@v1
       with:
-        files: .
+        files: src\Orangebeard.Client\bin\Release
         dest: release_artifacts.zip
                 
     - name: Create Release
@@ -32,9 +39,10 @@ jobs:
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_TIME: "${{ steps.time.outputs.time }}"
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: $RELEASE_TIME
+        release_name: Release $RELEASE_TIME
         draft: false
         prerelease: false
 
