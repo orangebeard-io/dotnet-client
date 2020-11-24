@@ -16,6 +16,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
       
     - uses: actions/checkout@v2
-    
+    - name: NuGet PKG Restore
+      run: msbuild -t:restore
     - name: Build
-      run: msbuild src/Orangebeard.Client/Orangebeard.Client.sln
+      run: msbuild src/Orangebeard.Client/Orangebeard.Client.csproj
