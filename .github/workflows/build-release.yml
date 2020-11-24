@@ -18,7 +18,7 @@ jobs:
       uses: nanzm/get-time-action@v1.1
       with:
         timeZone: 1
-        format: 'YYYY-MM-DD HHmm'
+        format: 'YYYYMMDD_HHmm'
     
     - uses: actions/checkout@v2
     
