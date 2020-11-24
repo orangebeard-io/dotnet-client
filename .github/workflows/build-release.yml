@@ -24,7 +24,7 @@ jobs:
     - name: Archive Release
       uses: papeloto/action-zip@v1
       with:
-        files: bin\Release
+        files: .
         dest: release_artifacts.zip
                 
     - name: Create Release
