@@ -8,15 +8,43 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
-
     steps:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
-      
+    
     - uses: actions/checkout@v2
+    
     - name: NuGet PKG Restore
       run: msbuild -t:restore src/Orangebeard.Client/Orangebeard.Client.sln
+    
     - name: Build
       run: msbuild src/Orangebeard.Client/Orangebeard.Client.csproj /p:Configuration=Release /p:NoWarn=1591
+    
+    - name: Zip Artefact s
+      uses: montudor/action-zip@v0.1.1
+      with:
+        args: zip -qq -r release_artifacts.zip bin\Release
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release_artifacts.zip
+        asset_name: release_artifacts.zip
+        asset_content_type: application/zip
+  
