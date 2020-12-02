@@ -12,13 +12,6 @@ namespace Orangebeard.Client.Abstractions.Resources
     public interface ITestItemResource
     {
         /// <summary>
-        /// Assign issues to specified test items.
-        /// </summary>
-        /// <param name="request">Information about test items and their issues.</param>
-        /// <returns>A list of assigned issues.</returns>
-        Task<IEnumerable<Issue>> AssignIssuesAsync(AssignTestItemIssuesRequest request);
-
-        /// <summary>
         /// Deletes specified test item.
         /// </summary>
         /// <param name="id">ID of the test item to delete.</param>

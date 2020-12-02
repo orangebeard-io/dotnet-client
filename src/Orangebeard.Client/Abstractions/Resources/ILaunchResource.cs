@@ -11,12 +11,6 @@ namespace Orangebeard.Client.Abstractions.Resources
     public interface ILaunchResource
     {
         /// <summary>
-        /// Analyzes launches.
-        /// </summary>
-        /// <returns>A message from service.</returns>
-        Task<MessageResponse> AnalyzeAsync(AnalyzeLaunchRequest request);
-
-        /// <summary>
         /// Finishes specified launch.
         /// </summary>
         /// <param name="uuid">UUID of specified launch.</param>
@@ -58,13 +52,6 @@ namespace Orangebeard.Client.Abstractions.Resources
         /// <param name="filterOption">Specified criterias for retrieving launches.</param>
         /// <returns>A list of launches.</returns>
         Task<Content<LaunchResponse>> GetDebugAsync(FilterOption filterOption = null);
-
-        /// <summary>
-        /// Merge several launches.
-        /// </summary>
-        /// <param name="request">Request for merging.</param>
-        /// <returns>Returns the model of merged launches.</returns>
-        Task<LaunchResponse> MergeAsync(MergeLaunchesRequest request);
 
         /// <summary>
         /// Starts new launch.

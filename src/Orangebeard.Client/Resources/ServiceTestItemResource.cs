@@ -68,14 +68,7 @@ namespace Orangebeard.Client.Resources
         {
             return DeleteAsJsonAsync<MessageResponse>($"{ProjectName}/item/{id}");
         }
-
-        public Task<IEnumerable<Issue>> AssignIssuesAsync(AssignTestItemIssuesRequest request)
-        {
-            return PutAsJsonAsync<IEnumerable<Issue>, AssignTestItemIssuesRequest>(
-                $"{ProjectName}/item",
-                request);
-        }
-
+       
         public Task<Content<TestItemHistoryContainer>> GetHistoryAsync(long id, int depth)
         {
             var uri = $"{ProjectName}/item/history?filter.eq.id={id}&type=line&historyDepth={depth}";
