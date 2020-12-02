@@ -67,20 +67,10 @@ namespace Orangebeard.Client.Resources
         {
             return DeleteAsJsonAsync<MessageResponse>($"{ProjectName}/launch/{id}");
         }
-
-        public Task<LaunchResponse> MergeAsync(MergeLaunchesRequest request)
-        {
-            return PostAsJsonAsync<LaunchResponse, MergeLaunchesRequest>($"{ProjectName}/launch/merge", request);
-        }
-
+       
         public Task<MessageResponse> UpdateAsync(string uuid, UpdateLaunchRequest request)
         {
             return PutAsJsonAsync<MessageResponse, UpdateLaunchRequest>($"{ProjectName}/launch/{uuid}/update", request);
-        }
-
-        public Task<MessageResponse> AnalyzeAsync(AnalyzeLaunchRequest request)
-        {
-            return PostAsJsonAsync<MessageResponse, AnalyzeLaunchRequest>($"{ProjectName}/launch/analyze", request);
         }
     }
 }

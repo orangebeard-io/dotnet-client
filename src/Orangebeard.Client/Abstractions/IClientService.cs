@@ -13,10 +13,5 @@ namespace Orangebeard.Client.Abstractions
 
         ILogItemResource LogItem { get; }
 
-        IUserResource User { get; }
-
-        IUserFilterResource UserFilter { get; }
-
-        IProjectResource Project { get; }
     }
 }
