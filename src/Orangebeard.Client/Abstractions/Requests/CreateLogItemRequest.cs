@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace Orangebeard.Client.Abstractions.Requests
 {
     /// <summary>
-    /// Defines a request for logging messages into Report Portal.
+    /// Defines a request for logging messages to Orangebeard.
     /// </summary>
     [DataContract]
     public class CreateLogItemRequest
