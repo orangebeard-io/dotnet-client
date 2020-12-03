@@ -19,7 +19,7 @@ namespace Orangebeard.Shared.Configuration
         {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
 
-            builder.AddJsonFile(Path.Combine(baseDir, "ReportPortal.config.json"), optional: true);
+            builder.AddJsonFile(Path.Combine(baseDir, "Orangebeard.config.json"), optional: true);
             builder.AddDirectoryProbing(baseDir);
             builder.AddEnvironmentVariables();
 
@@ -33,7 +33,7 @@ namespace Orangebeard.Shared.Configuration
             return builder.Add(new JsonFileConfigurationProvider(ConfigurationPath.KeyDelimeter, filePath, optional));
         }
 
-        public static IConfigurationBuilder AddEnvironmentVariables(this IConfigurationBuilder builder, string prefix = "REPORTPORTAL_", string delimeter = "_")
+        public static IConfigurationBuilder AddEnvironmentVariables(this IConfigurationBuilder builder, string prefix = "ORANGEBEARD_", string delimeter = "_")
         {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
 
@@ -46,7 +46,7 @@ namespace Orangebeard.Shared.Configuration
             return builder;
         }
 
-        public static IConfigurationBuilder AddDirectoryProbing(this IConfigurationBuilder builder, string directoryPath, string prefix = "ReportPortal", string delimiter = "_", bool optional = true)
+        public static IConfigurationBuilder AddDirectoryProbing(this IConfigurationBuilder builder, string directoryPath, string prefix = "ORANGEBEARD", string delimiter = "_", bool optional = true)
         {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
 

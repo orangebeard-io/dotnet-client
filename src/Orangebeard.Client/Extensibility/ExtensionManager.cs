@@ -42,7 +42,7 @@ namespace Orangebeard.Shared.Extensibility
 
                         TraceLogger.Info($"Exploring extensions in '{currentDirectory}' directory.");
 
-                        foreach (var file in currentDirectory.GetFiles("*ReportPortal*.dll"))
+                        foreach (var file in currentDirectory.GetFiles("*Orangebeard*.dll"))
                         {
                             TraceLogger.Verbose($"Found '{file.Name}' and loading it into current AppDomain.");
                             AppDomain.CurrentDomain.Load(Path.GetFileNameWithoutExtension(file.Name));
@@ -52,7 +52,7 @@ namespace Orangebeard.Shared.Extensibility
                         var iReportEventObserseExtensionInterfaceType = typeof(IReportEventsObserver);
                         var iCommandsListenerInterfaceType = typeof(ICommandsListener);
 
-                        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("ReportPortal")))
+                        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("Orangebeard")))
                         {
                             if (!_exploredAssemblies.Contains(assembly.Location))
                             {

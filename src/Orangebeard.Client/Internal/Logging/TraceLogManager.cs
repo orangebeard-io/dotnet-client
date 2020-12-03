@@ -71,7 +71,7 @@ namespace Orangebeard.Shared.Internal.Logging
             {
                 if (!_traceLoggers.ContainsKey(type))
                 {
-                    var envTraceLevelValue = Environment.GetEnvironmentVariable("ReportPortal_TraceLevel");
+                    var envTraceLevelValue = Environment.GetEnvironmentVariable("Orangebeard_TraceLevel");
 
                     SourceLevels traceLevel;
 
@@ -82,7 +82,7 @@ namespace Orangebeard.Shared.Internal.Logging
 
                     var traceSource = new TraceSource(type.Name);
 
-                    traceSource.Switch = new SourceSwitch("ReportPortal_TraceSwitch", traceLevel.ToString());
+                    traceSource.Switch = new SourceSwitch("Orangebeard_TraceSwitch", traceLevel.ToString());
 
                     var logFileName = $"{type.Assembly.GetName().Name}.{Process.GetCurrentProcess().Id}.log";
 
