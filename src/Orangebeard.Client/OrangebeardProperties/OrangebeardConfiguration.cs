@@ -25,6 +25,7 @@ namespace Orangebeard.Client.OrangebeardProperties
             {
                 throw new OrangebeardConfigurationException("Not all required configuration properties (Endpoint, AccessToken, ProjectName, TestSetName) are present!");
             }
+            ProjectName = ProjectName.ToLower();
         }
 
         public OrangebeardConfiguration()
@@ -32,6 +33,7 @@ namespace Orangebeard.Client.OrangebeardProperties
             ReadPropertyFile(ORANGEBEARD_PROPERTY_FILE);
             ReadEnvironmentVariables(".");
             ReadEnvironmentVariables("_");
+            ProjectName = ProjectName.ToLower();
         }
 
         public bool RequiredPropertiesArePresent()
