@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Orangebeard.Client;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -76,7 +77,7 @@ namespace Orangebeard.Shared.Internal.Delegating
                     result = await func().ConfigureAwait(false);
                     break;
                 }
-                catch (Exception exp) when (exp is TaskCanceledException || exp is HttpRequestException)
+                catch (Exception exp) when (exp is TaskCanceledException || exp is HttpRequestException || exp.InnerException is HttpRequestException)
                 {
                     if (i < MaxRetryAttemps - 1)
                     {
