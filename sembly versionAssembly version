@@ -1,0 +1,228 @@
+[33mcommit 71b31e2e1eb858117eabe7a945f270446cf3d159[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Jan 28 14:24:30 2021 +0100
+
+    version needs 4 positions for bump action
+
+[33mcommit 25c5afd6553d3ad1d683ddf9266dbe603d58b13f[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Jan 28 13:42:57 2021 +0100
+
+    Explicit version file with quotes
+
+[33mcommit bfdfe699aaeeec618df46c92d616bf629633f351[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Jan 28 13:41:24 2021 +0100
+
+    Explicit version file
+
+[33mcommit 53ad93d147471fe5c582ead1edc542e76224554f[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Jan 28 13:34:50 2021 +0100
+
+    Fix  yml indentation
+
+[33mcommit 7d1cb71ca2a3a32a43a09cd529b8292e5a175fdb[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Jan 28 13:34:06 2021 +0100
+
+    Fix github workflow
+
+[33mcommit b9d206d38a5ade0b7215fee5228b0de5a948ac71[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Jan 28 13:32:34 2021 +0100
+
+    Support useragent with listener info, release should now bump version
+
+[33mcommit 3dc7fbca946596bbc3fc3cf3f875e2ccef24c283[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Tue Jan 19 16:59:27 2021 +0100
+
+    Retry failed requests also if a non-OK status was returned
+
+[33mcommit f1c9460a9fd67911622fff380b288dd2434ec7b1[m[33m ([m[1;33mtag: 20210112_1519[m[33m)[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Tue Jan 12 15:19:01 2021 +0100
+
+    Always convert projectname to lowercase
+
+[33mcommit 5477f6519581419ac9ea31212906ba53445f2777[m[33m ([m[1;33mtag: 20201203_1247[m[33m)[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Dec 3 12:46:50 2020 +0100
+
+    Update comments
+
+[33mcommit 955c2c26c686f21d7c85c7d09fd5b1aea8021a82[m[33m ([m[1;33mtag: 20201203_1240[m[33m)[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Dec 3 12:39:37 2020 +0100
+
+    A bit more cleanup
+
+[33mcommit 1764f3166291e8db3ba9d8fbdd07f7c34c4151c5[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Wed Dec 2 17:48:04 2020 +0100
+
+    Apache License
+
+[33mcommit 9c7ef3eba80d8fe24535b53b2ab46cde0cdab91e[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Wed Dec 2 17:45:14 2020 +0100
+
+    Apache License
+
+[33mcommit 2adf34d1ee72fda696f966db6ccc5c70f6d33fd9[m[33m ([m[1;33mtag: 20201202_1739[m[33m)[m
+Merge: e47457f 862a1a5
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Wed Dec 2 17:38:45 2020 +0100
+
+    Merge pull request #1 from orangebeard-io/listener-api-only
+    
+    Remove unnecessary RP code
+
+[33mcommit e47457fbc23bc07831954dbfc35a4820d265c135[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Wed Dec 2 17:31:25 2020 +0100
+
+    release only on master push
+
+[33mcommit 862a1a534d16551be7e8660aa6a32e32ad9f7a0d[m[33m ([m[1;31morigin/listener-api-only[m[33m, [m[1;32mlistener-api-only[m[33m)[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Wed Dec 2 17:24:18 2020 +0100
+
+    Remove unnecessary RP code
+
+[33mcommit f2b4404a4fc829e28f7294e770e0540d5444c5e7[m[33m ([m[1;33mtag: 20201124_1651[m[33m)[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 16:51:07 2020 +0100
+
+    Tag name can not have spaces
+
+[33mcommit da3960b2c761464ea51fdfff6a6b543403bb6ca1[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 16:47:11 2020 +0100
+
+    No colons in tag name
+
+[33mcommit 452d4c59311cbaed52619bf89e796851aed66480[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 16:43:57 2020 +0100
+
+    get timestamp output
+
+[33mcommit 8f1a74eb2f102e3f2b0e186e9a4f6bf04b85da8d[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 16:40:10 2020 +0100
+
+    Use timestamp
+
+[33mcommit f784bb5d2ad9430775313b2f8658312a36795360[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 16:22:24 2020 +0100
+
+    zip all to see struct
+
+[33mcommit f1432189e4717e538dbd62a256d23fca92d914d0[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 16:10:07 2020 +0100
+
+    other zip
+
+[33mcommit 98964cf1e6096c0e59c6cebec02b2dc629dab9ab[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 16:05:40 2020 +0100
+
+    other zip action
+
+[33mcommit 71fc3312186f8e0661ae15f1b6a1454a3eed183b[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 16:01:33 2020 +0100
+
+    Create release
+
+[33mcommit 7b63e92236dff43e8ab077247e7e637335de2d2a[m
+Merge: 325567d dd69a84
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 15:36:54 2020 +0100
+
+    Merge branch 'master' of github.com:orangebeard-io/dotnet-client
+
+[33mcommit 325567d8284439c902366dd029143cb793f21600[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 15:36:33 2020 +0100
+
+    Update xml comment
+
+[33mcommit dd69a8441c2fd90d30e8e5c5f49e4a050bf69582[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 15:29:25 2020 +0100
+
+    suppress 1591
+
+[33mcommit f2bb6232dd48639e98d33bdbf9824cc9615cbb99[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 15:10:28 2020 +0100
+
+    Update dotnet-core-build.yml
+
+[33mcommit a22b0021e9a4929c77553c6643d7617410611ea9[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 15:08:47 2020 +0100
+
+    Update dotnet-core-build.yml
+
+[33mcommit d9b9b39eaa98f37c6e9c8645de4966e14a44b85c[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 15:05:09 2020 +0100
+
+    Update dotnet-core-build.yml
+
+[33mcommit 8116609c2e4258c9b04253faad8d1a2ac2a974c8[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 15:01:13 2020 +0100
+
+    remove dash
+
+[33mcommit 763b0b82bbe24841b5bced8f1687b5f562f84a81[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 15:00:15 2020 +0100
+
+    Use MSBuild
+
+[33mcommit db7d64b1eb0bd7b0bdcbfb170ef6be6e9e318d3f[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 14:51:24 2020 +0100
+
+    Update dotnet-core-build.yml
+
+[33mcommit ce2a5a4ba3680d2f39b05e8b1c0506a81e3b0b22[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Tue Nov 24 14:48:07 2020 +0100
+
+    Add build action
+
+[33mcommit 41297671eefd90b7ff2080c71b7231db97bfe96e[m
+Merge: 9eeb5f6 8ac1d6c
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Nov 19 17:41:55 2020 +0100
+
+    Merge branch 'master' of github.com:orangebeard-io/dotnet-client
+
+[33mcommit 9eeb5f6d7050c2f1ba96c6892142168e3f3b5012[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Thu Nov 19 17:41:28 2020 +0100
+
+    Refactored
+    Config in client
+    Update from launchreporter
+
+[33mcommit 8ac1d6c9a00c85ae4dd4cfa00f3fe7dabd27bb90[m
+Author: Tom Heintzberger <tom.heintzberger@gmail.com>
+Date:   Wed Nov 18 17:20:47 2020 +0100
+
+    Update README.md
+
+[33mcommit 665dff4c5f0ad527111d478417f706691fc98f3e[m
+Author: Tcnh <tom.heintzberger@gmail.com>
+Date:   Wed Nov 18 17:18:48 2020 +0100
+
+    first version

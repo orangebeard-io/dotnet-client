@@ -2,6 +2,7 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 
 namespace Orangebeard.Client
 {
@@ -42,12 +43,15 @@ namespace Orangebeard.Client
                 httpClient.DefaultRequestHeaders.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _token);
-                if(_userAgentPostFix != null)
+                if (_userAgentPostFix != null)
                 {
-                    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter/" + typeof(OrangebeardClient).Assembly.GetName().Version + " " + _userAgentPostFix);
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter/" + 
+                        Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion + 
+                        " " + _userAgentPostFix);
                 } else
                 {
-                    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter");
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter" +
+                        Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
                 }
                 return httpClient;
             }
