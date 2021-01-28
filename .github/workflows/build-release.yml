@@ -19,10 +19,11 @@ jobs:
         version_files: "**/*.csproj"
         github_token: ${{ secrets.GITHUB_TOKEN }}
         
-      - uses: naminodarie/get-net-sdk-project-versions-action@v1
-        id: get-version
-        with:
-          proj-path: src\Orangebeard.Client\Orangebeard.Client.csproj
+    - name: Get Version info
+      uses: naminodarie/get-net-sdk-project-versions-action@v1
+      id: get-version
+      with:
+      proj-path: src\Orangebeard.Client\Orangebeard.Client.csproj
     
     - name: NuGet PKG Restore
       run: msbuild -t:restore src/Orangebeard.Client/Orangebeard.Client.sln
