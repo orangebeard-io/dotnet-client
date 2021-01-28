@@ -9,16 +9,20 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
-    
-    - name: Get Time
-      id: time
-      uses: nanzm/get-time-action@v1.1
-      with:
-        timeZone: 1
-        format: 'YYYYMMDD_HHmm'
-    
+      uses: microsoft/setup-msbuild@v1.0.2    
+     
     - uses: actions/checkout@v2
+    
+    - name: Bump versions
+      uses: SiqiLu/dotnet-bump-version@master
+      with:
+        version_files: "**/*.csproj"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        
+      - uses: naminodarie/get-net-sdk-project-versions-action@v1
+        id: get-version
+        with:
+          proj-path: src\Orangebeard.Client\Orangebeard.Client.csproj
     
     - name: NuGet PKG Restore
       run: msbuild -t:restore src/Orangebeard.Client/Orangebeard.Client.sln
@@ -38,8 +42,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.time.outputs.time }}
-        release_name: Release ${{ steps.time.outputs.time }}
+        tag_name: ${{ steps.get-version.outputs.assembly-version }}
+        release_name: Release ${{ steps.get-version.outputs.assembly-version }}
         draft: false
         prerelease: false
 

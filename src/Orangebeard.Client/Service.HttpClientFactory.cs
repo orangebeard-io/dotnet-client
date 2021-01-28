@@ -11,11 +11,20 @@ namespace Orangebeard.Client
         {
             private Uri _baseUri;
             private string _token;
+            private string _userAgentPostFix;
 
+            [Obsolete("HttpClientFactory(Uri baseUri, string token) is deprecated, please use HttpClientFactory(Uri baseUri, string token, string userAgentPostfix) instead, so listeners can be identified.")]
             public HttpClientFactory(Uri baseUri, string token)
             {
                 _baseUri = baseUri;
                 _token = token;
+            }
+
+            public HttpClientFactory(Uri baseUri, string token, string userAgentPostfix)
+            {
+                _baseUri = baseUri;
+                _token = token;
+                _userAgentPostFix = userAgentPostfix;
             }
 
             public HttpClient Create()
@@ -33,8 +42,13 @@ namespace Orangebeard.Client
                 httpClient.DefaultRequestHeaders.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _token);
-                httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter");
-
+                if(_userAgentPostFix != null)
+                {
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter/" + typeof(OrangebeardClient).Assembly.GetName().Version + " " + _userAgentPostFix);
+                } else
+                {
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter");
+                }
                 return httpClient;
             }
         }

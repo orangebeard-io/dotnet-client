@@ -13,7 +13,8 @@ namespace Orangebeard.Client.OrangebeardProperties
         public string AccessToken { get; private set; }
         public string ProjectName { get; private set; }
         public string TestSetName { get; private set; }
-        public string _description { get; private set; }
+        public string Description { get; private set; }
+        public string ListenerIdentification { get; private set; }
         public ISet<ItemAttribute> Attributes { get; private set; }
 
         public OrangebeardConfiguration(string propertyFile)
@@ -34,6 +35,12 @@ namespace Orangebeard.Client.OrangebeardProperties
             ReadEnvironmentVariables(".");
             ReadEnvironmentVariables("_");
             ProjectName = ProjectName.ToLower();
+        }
+
+        public OrangebeardConfiguration WithListenerIdentification(string ListenerIdentification)
+        {
+            this.ListenerIdentification = ListenerIdentification;
+            return this;
         }
 
         public bool RequiredPropertiesArePresent()
@@ -76,7 +83,7 @@ namespace Orangebeard.Client.OrangebeardProperties
                 AccessToken = GetValueOrNull(properties, ORANGEBEARD_ACCESS_TOKEN);
                 ProjectName = GetValueOrNull(properties, ORANGEBEARD_PROJECT);
                 TestSetName = GetValueOrNull(properties, ORANGEBEARD_TESTSET);
-                _description = GetValueOrNull(properties, ORANGEBEARD_DESCRIPTION);
+                Description = GetValueOrNull(properties, ORANGEBEARD_DESCRIPTION);
                 Attributes = ExtractAttributes(GetValueOrNull(properties, ORANGEBEARD_ATTRIBUTES));
             } catch (FileNotFoundException)
             {

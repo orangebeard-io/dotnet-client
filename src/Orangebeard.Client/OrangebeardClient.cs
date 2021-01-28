@@ -20,7 +20,7 @@ namespace Orangebeard.Client
         public OrangebeardClient(OrangebeardConfiguration config)
         {
             ProjectName = config.ProjectName;
-            _httpClient = new HttpClientFactory(new Uri(config.Endpoint), config.AccessToken).Create();
+            _httpClient = new HttpClientFactory(new Uri(config.Endpoint), config.AccessToken, config.ListenerIdentification).Create();
             
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
