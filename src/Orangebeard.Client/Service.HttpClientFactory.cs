@@ -45,13 +45,13 @@ namespace Orangebeard.Client
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _token);
                 if (_userAgentPostFix != null)
                 {
-                    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter/" + 
-                        Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion + 
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter/" +
+                        typeof(OrangebeardClient).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion + 
                         " " + _userAgentPostFix);
                 } else
                 {
                     httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter" +
-                        Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+                        typeof(OrangebeardClient).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
                 }
                 return httpClient;
             }
