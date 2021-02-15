@@ -71,6 +71,7 @@ namespace Orangebeard.Shared.MimeTypes
                 {".axs", "application/olescript"},
                 {".axv", "video/annodex"},
                 {".bas", "text/plain"},
+                {".bat", "application/x-bat" },
                 {".bcpio", "application/x-bcpio"},
                 {".bin", "application/octet-stream"},
                 {".bmp", "image/bmp"},

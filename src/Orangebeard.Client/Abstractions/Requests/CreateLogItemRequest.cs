@@ -60,7 +60,7 @@ namespace Orangebeard.Client.Abstractions.Requests
         /// </summary>
         [DataMember(Name = "file", EmitDefaultValue = false)]
         public LogItemAttach Attach { get; set; }
-    }
+    } 
 
     [DataContract]
     public class LogItemAttach

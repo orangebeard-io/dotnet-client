@@ -16,6 +16,7 @@ namespace Orangebeard.Client.OrangebeardProperties
         public string Description { get; private set; }
         public string ListenerIdentification { get; private set; }
         public ISet<ItemAttribute> Attributes { get; private set; }
+        public IList<string> FileUploadPatterns { get; private set; }
 
         public OrangebeardConfiguration(string propertyFile)
         {
@@ -66,6 +67,11 @@ namespace Orangebeard.Client.OrangebeardProperties
             {
                 TestSetName = Environment.GetEnvironmentVariable(ORANGEBEARD_TESTSET.Replace(".", separator));
             }
+            if (Environment.GetEnvironmentVariable(ORANGEBEARD_FILEUPLOAD_PATTERNS.Replace(".", separator)) != null)
+            {
+                string patternList = Environment.GetEnvironmentVariable(ORANGEBEARD_FILEUPLOAD_PATTERNS.Replace(".", separator));
+                FileUploadPatterns = new List<string>(patternList.Split(';')); 
+            }
         }
 
         private void ReadPropertyFile(string propertyFile)
@@ -85,6 +91,7 @@ namespace Orangebeard.Client.OrangebeardProperties
                 TestSetName = GetValueOrNull(properties, ORANGEBEARD_TESTSET);
                 Description = GetValueOrNull(properties, ORANGEBEARD_DESCRIPTION);
                 Attributes = ExtractAttributes(GetValueOrNull(properties, ORANGEBEARD_ATTRIBUTES));
+                FileUploadPatterns = new List<string>(GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS).Split(';'));
             } catch (FileNotFoundException)
             {
                 //ignore
@@ -114,6 +121,7 @@ namespace Orangebeard.Client.OrangebeardProperties
 
             return attributes;
         }
+
 
         private string GetValueOrNull(IDictionary<string, string> dict, string key)
         {

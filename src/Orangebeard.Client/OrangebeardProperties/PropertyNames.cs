@@ -13,5 +13,6 @@ namespace Orangebeard.Client.OrangebeardProperties
         public static readonly string ORANGEBEARD_DESCRIPTION = "orangebeard.description";
         public static readonly string ORANGEBEARD_ATTRIBUTES = "orangebeard.attributes";
         public static readonly string ORANGEBEARD_ACCESS_TOKEN = "orangebeard.accessToken";
+        public static readonly string ORANGEBEARD_FILEUPLOAD_PATTERNS = "orangebeard.fileupload.patterns";
     }
 }
