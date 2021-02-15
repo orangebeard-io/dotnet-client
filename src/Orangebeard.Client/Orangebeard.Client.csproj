@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net45;</TargetFrameworks>
     <PackageId>Orangebeard.Client</PackageId>
-    <Version>1.1.0.3</Version>
+    <Version>1.1.0.4</Version>
     <Description>API client for Orangebeard</Description>
     <Authors>Tom Heintzberger</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
