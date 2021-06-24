@@ -8,7 +8,7 @@
     <Authors>Tom Heintzberger</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://orangebeard.io</PackageProjectUrl>
-    <PackageIcon>Logo.png</PackageIcon>
+    <PackageIcon>beard.png</PackageIcon>
     <RepositoryType>GitHub</RepositoryType>
     <RepositoryUrl>https://github.com/orangebeard-io/dotnet-client</RepositoryUrl>
     <PackageTags>orangebeard api client</PackageTags>
