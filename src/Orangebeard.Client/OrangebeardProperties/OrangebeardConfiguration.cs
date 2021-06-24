@@ -1,8 +1,9 @@
 ﻿using Orangebeard.Client.Abstractions.Models;
+using Orangebeard.Shared.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
 using static Orangebeard.Client.OrangebeardProperties.PropertyNames;
 
 namespace Orangebeard.Client.OrangebeardProperties
@@ -28,6 +29,16 @@ namespace Orangebeard.Client.OrangebeardProperties
                 throw new OrangebeardConfigurationException("Not all required configuration properties (Endpoint, AccessToken, ProjectName, TestSetName) are present!");
             }
             ProjectName = ProjectName.ToLower();
+        }
+
+        public OrangebeardConfiguration(IConfiguration config)
+        {
+            Endpoint = config.GetValue<string>(ConfigurationPath.ServerUrl);
+            AccessToken = config.GetValue<string>(ConfigurationPath.ServerAuthenticationUuid);
+            ProjectName = config.GetValue<string>(ConfigurationPath.ServerProject);
+            TestSetName = config.GetValue<string>(ConfigurationPath.TestSetName);
+            Description = config.GetValue<string>(ConfigurationPath.TestSetDescription);
+            Attributes = (ISet<ItemAttribute>) config.GetKeyValues(ConfigurationPath.Attributes, new HashSet<KeyValuePair<string, string>>()).Select(a => new ItemAttribute { Key = a.Key, Value = a.Value }).ToList();
         }
 
         public OrangebeardConfiguration()
@@ -77,8 +88,6 @@ namespace Orangebeard.Client.OrangebeardProperties
         private void ReadPropertyFile(string propertyFile)
         {
             IDictionary<string, string> properties;
-
-
             try
             {
                 using (TextReader reader = new StreamReader(propertyFile))
