@@ -39,6 +39,11 @@ namespace Orangebeard.Client.OrangebeardProperties
             TestSetName = config.GetValue<string>(ConfigurationPath.TestSetName);
             Description = config.GetValue<string>(ConfigurationPath.TestSetDescription);
             Attributes = (ISet<ItemAttribute>) config.GetKeyValues(ConfigurationPath.Attributes, new HashSet<KeyValuePair<string, string>>()).Select(a => new ItemAttribute { Key = a.Key, Value = a.Value }).ToList();
+            if (!RequiredPropertiesArePresent())
+            {
+                throw new OrangebeardConfigurationException("Not all required configuration properties (Endpoint, AccessToken, ProjectName, TestSetName) are present!");
+            }
+            ProjectName = ProjectName.ToLower();
         }
 
         public OrangebeardConfiguration()
