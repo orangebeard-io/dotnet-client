@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\Logo.png" Pack="true" PackagePath="\" Visible="false" />
+    <None Include="..\..\beard.png" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
