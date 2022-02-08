@@ -88,6 +88,6 @@ namespace Orangebeard.Client.Abstractions.Requests
         public IList<ItemAttribute> Attributes { get; set; }
 
         [DataMember(Name = "changedComponents")]
-        public ISet<ChangedComponent> ChangedComponents { get; set; }
+        public IList<ChangedComponent> ChangedComponents { get; set; }
     }
 }

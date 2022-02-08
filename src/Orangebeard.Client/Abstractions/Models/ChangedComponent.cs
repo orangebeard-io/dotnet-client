@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Orangebeard.Client.Abstractions.Models
 {
+    [DataContract]
     public class ChangedComponent
     {
         [DataMember(Name = "ComponentName")]
