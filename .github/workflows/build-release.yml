@@ -32,7 +32,7 @@ jobs:
       run: msbuild src/Orangebeard.Client/Orangebeard.Client.csproj /p:Configuration=Release /p:NoWarn=1591
     
     - name: Archive Release
-      uses: papeloto/action-zip@v1
+      uses: vimtor/action-zip@v1
       with:
         files: src\Orangebeard.Client\bin\Release
         dest: release_artifacts.zip
