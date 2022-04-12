@@ -12,9 +12,9 @@ namespace Orangebeard.Client.Extensions
             {
                 normalizedUri = new Uri(normalizedUri + "/");
             }
-            if (!normalizedUri.LocalPath.ToLowerInvariant().EndsWith("listener/v1/"))
+            if (!normalizedUri.LocalPath.ToLowerInvariant().EndsWith("listener/v2/"))
             {
-                normalizedUri = new Uri(uri + "listener/v1/");
+                normalizedUri = new Uri(uri + "listener/v2/");
             }
 
             return normalizedUri;
