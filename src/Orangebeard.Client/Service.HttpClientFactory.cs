@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Orangebeard.Client
 {
-    partial class OrangebeardClient
+    partial class ORIGINAL_OrangebeardClient
     {
         class HttpClientFactory : IHttpClientFactory
         {
@@ -46,12 +46,12 @@ namespace Orangebeard.Client
                 if (_userAgentPostFix != null)
                 {
                     httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter/" +
-                        typeof(OrangebeardClient).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion + 
+                        typeof(OrangebeardV2Client).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion + 
                         " " + _userAgentPostFix);
                 } else
                 {
                     httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter" +
-                        typeof(OrangebeardClient).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+                        typeof(OrangebeardV2Client).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
                 }
                 return httpClient;
             }

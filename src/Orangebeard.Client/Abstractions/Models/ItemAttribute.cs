@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Orangebeard.Client.Abstractions.Models
 {
+    //TODO!~ Check if this really used differently from Attribute in Entities.
     [DataContract]
     public class ItemAttribute
     {

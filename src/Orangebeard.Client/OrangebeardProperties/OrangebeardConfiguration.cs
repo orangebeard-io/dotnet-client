@@ -54,6 +54,14 @@ namespace Orangebeard.Client.OrangebeardProperties
             ProjectName = ProjectName.ToLower();
         }
 
+        public OrangebeardConfiguration(string endpoint, Guid uuid, string projectName, string testSetName)
+        {
+            this.Endpoint = endpoint;
+            this.AccessToken = uuid.ToString();
+            this.ProjectName = projectName.ToLower();
+            this.TestSetName = testSetName;
+        }
+
         public OrangebeardConfiguration WithListenerIdentification(string ListenerIdentification)
         {
             this.ListenerIdentification = ListenerIdentification;
