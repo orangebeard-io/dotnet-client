@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <PackageId>Orangebeard.Client</PackageId>
-    <Version>1.1.0.14</Version>
+    <Version>2.0.0.0</Version>
     <Description>API client for Orangebeard</Description>
-    <Authors>Tom Heintzberger</Authors>
+    <Authors>Tom Heintzberger; Serge Barth</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://orangebeard.io</PackageProjectUrl>
     <PackageIcon>beard.png</PackageIcon>

@@ -4,6 +4,10 @@
     <TargetFramework>.NETFramework,Version=v4.5</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <Version>2.0.0.0</Version>
+
+    <Authors>Serge Barth</Authors>
   </PropertyGroup>
 
   <ItemGroup>
