@@ -1,10 +1,10 @@
 ﻿using Orangebeard.Client.Entities;
+using Orangebeard.Client.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http.Headers;
+using System.Reflection;
 
 namespace Orangebeard.Client
 {
@@ -22,5 +22,37 @@ namespace Orangebeard.Client
         public abstract Guid? StartTestItem(Guid? suiteId, StartTestItem testItem);
         public abstract Guid? StartTestRun(StartTestRun testRun);
         public abstract void UpdateTestRun(Guid testRunUUID, UpdateTestRun updateTestRun);
+
+
+        public void InitializeHttpClient(Uri baseUri, string token, string userAgentPostFix)
+        {
+            var httpClientHandler = new HttpClientHandler();
+
+#if !NET45
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+#endif
+
+            httpClient = new HttpClient(httpClientHandler);
+
+            httpClient.BaseAddress = baseUri.Normalize();
+
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+            //TODO?- This probably isn't needed anymore.
+            /*
+            if (userAgentPostFix != null)
+            {
+                httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter/" +
+                    typeof(OrangebeardV2Client).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion +
+                    " " + userAgentPostFix);
+            }
+            else
+            {
+                httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter" +
+                    typeof(OrangebeardV2Client).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+            }
+            */
+        }
     }
 }

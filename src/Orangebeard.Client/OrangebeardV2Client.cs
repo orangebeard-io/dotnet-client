@@ -5,6 +5,7 @@ using Orangebeard.Client.OrangebeardProperties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Orangebeard.Client
 {
-    class OrangebeardV2Client : AbstractClient
+    public class OrangebeardV2Client : AbstractClient
     {
         //private readonly ILogger<OrangebeardV2Client> LOGGER;
 
@@ -25,15 +26,25 @@ namespace Orangebeard.Client
             //LOGGER = loggerFactory.CreateLogger<OrangebeardV2Client>();
         }
 
+        private void Init(string endpoint, Guid uuid)
+        {
+            InitializeHttpClient(new Uri(endpoint), uuid.ToString(), null);
+
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; //TODO?- Not sure if this is still necessary.
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+        }
+
         public OrangebeardV2Client(string endpoint, Guid uuid, string projectName, string testSetName, bool connectionWithOrangebeardIsValid) : this()
         {
             config = new OrangebeardConfiguration(endpoint, uuid, projectName, testSetName);
+            Init(endpoint, uuid);
             this.connectionWithOrangebeardIsValid = connectionWithOrangebeardIsValid;
         }
 
         public OrangebeardV2Client(OrangebeardConfiguration config, bool connectionWithOrangebeardIsValid) : this()
         {
             this.config = config;
+            Init(config.Endpoint, new Guid(config.AccessToken));
             this.connectionWithOrangebeardIsValid = connectionWithOrangebeardIsValid;
         }
 

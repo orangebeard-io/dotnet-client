@@ -113,7 +113,19 @@ namespace Orangebeard.Client.OrangebeardProperties
                 TestSetName = GetValueOrNull(properties, ORANGEBEARD_TESTSET);
                 Description = GetValueOrNull(properties, ORANGEBEARD_DESCRIPTION);
                 Attributes = ExtractAttributes(GetValueOrNull(properties, ORANGEBEARD_ATTRIBUTES));
-                FileUploadPatterns = new List<string>(GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS).Split(';'));
+
+                //FileUploadPatterns = new List<string>(GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS).Split(';'));
+                var uploadPatterns = GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS);
+                if (uploadPatterns != null)
+                {
+                    FileUploadPatterns = new List<string>(uploadPatterns.Split(';'));
+                }
+                else
+                {
+                    FileUploadPatterns = new List<string>();
+                }
+
+
             } catch (FileNotFoundException)
             {
                 //ignore
