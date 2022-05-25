@@ -17,12 +17,7 @@ namespace Orangebeard.Client.Tests
     public class IntegrationTest
     {
         //private readonly string propertiesFile = @"orangebeard.properties";
-        //private readonly string imageFile = @"TestPlaatje1.jpg";
-
-        //private static readonly string basedir = @"C:\Users\serge\source\repos\dotnet-client-v2";
-        //private readonly string imageFile = $"{basedir}\\TestPlaatje1.jpg";
-
-        private readonly string imageFile = "TestImageV2Client.png";
+        private readonly string imageFile = @"TestImageV2Client.png";
 
         [TestMethod()]
         public void RoundTripTest()

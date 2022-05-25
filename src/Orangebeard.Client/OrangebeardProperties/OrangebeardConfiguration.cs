@@ -16,7 +16,7 @@ namespace Orangebeard.Client.OrangebeardProperties
         public string TestSetName { get; private set; }
         public string Description { get; private set; }
         public string ListenerIdentification { get; private set; }
-        public ISet<ItemAttribute> Attributes { get; private set; }
+        public ISet<Entities.Attribute> Attributes { get; private set; }
         public IList<string> FileUploadPatterns { get; private set; }
 
         public OrangebeardConfiguration(string propertyFile)
@@ -38,7 +38,14 @@ namespace Orangebeard.Client.OrangebeardProperties
             ProjectName = config.GetValue<string>(ConfigurationPath.ServerProject);
             TestSetName = config.GetValue<string>(ConfigurationPath.TestSetName);
             Description = config.GetValue<string>(ConfigurationPath.TestSetDescription);
-            Attributes = new HashSet<ItemAttribute>(config.GetKeyValues(ConfigurationPath.Attributes, new HashSet<KeyValuePair<string, string>>()).Select(a => new ItemAttribute { Key = a.Key, Value = a.Value }).ToList());
+            Attributes = new HashSet<Entities.Attribute>(
+                config.GetKeyValues(
+                    ConfigurationPath.Attributes, 
+                    new HashSet<KeyValuePair<string, string>>()
+                )
+                .Select(a => new Entities.Attribute(a.Key, a.Value))
+                //.ToList()
+            );
             if (!RequiredPropertiesArePresent())
             {
                 throw new OrangebeardConfigurationException("Not all required configuration properties (Endpoint, AccessToken, ProjectName, TestSetName) are present!");
@@ -114,7 +121,6 @@ namespace Orangebeard.Client.OrangebeardProperties
                 Description = GetValueOrNull(properties, ORANGEBEARD_DESCRIPTION);
                 Attributes = ExtractAttributes(GetValueOrNull(properties, ORANGEBEARD_ATTRIBUTES));
 
-                //FileUploadPatterns = new List<string>(GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS).Split(';'));
                 var uploadPatterns = GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS);
                 if (uploadPatterns != null)
                 {
@@ -132,9 +138,9 @@ namespace Orangebeard.Client.OrangebeardProperties
             }
         }
 
-        private ISet<ItemAttribute> ExtractAttributes(string attributeList)
+        private ISet<Entities.Attribute> ExtractAttributes(string attributeList)
         {
-            ISet<ItemAttribute> attributes = new HashSet<ItemAttribute>();
+            ISet<Entities.Attribute> attributes = new HashSet<Entities.Attribute>();
             if (attributeList == null)
             {
                 return attributes;
@@ -145,11 +151,11 @@ namespace Orangebeard.Client.OrangebeardProperties
                 if (attribute.Contains(":"))
                 {
                     string[] keyVal = attribute.Split(':');
-                    attributes.Add(new ItemAttribute { Key = keyVal[0].Trim(), Value = keyVal[1].Trim() });
+                    attributes.Add(new Entities.Attribute(key: keyVal[0].Trim(), value: keyVal[1].Trim()));
                 }
                 else
                 {
-                    attributes.Add(new ItemAttribute { Value = attribute });
+                    attributes.Add(new Entities.Attribute(value: attribute));
                 }
             }
 
