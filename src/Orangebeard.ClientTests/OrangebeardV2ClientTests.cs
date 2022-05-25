@@ -26,7 +26,7 @@ namespace Orangebeard.Client.Tests
             var client = new OrangebeardV2Client(config.Endpoint, new Guid(config.AccessToken), config.ProjectName, "Testset Name", true);
 
             var testRunAttributes = new HashSet<Attribute>() { new Attribute("Test-Run-Key-1", "Test-Run-Value-1"), new Attribute("Test-Run-Value-Only-Attribute") };
-            //TODO!+ testRunAttributes.UnionWith(config.Attributes);
+            testRunAttributes.UnionWith(config.Attributes);
             var changedComponents = new HashSet<ChangedComponent>() { new ChangedComponent("Changed-Component-Name-1", "Changed-Component-Version-1") };
             var startTestRun = new StartTestRun("E2E test nieuwe .NET client", "End-to-end test van de nieuwe .NET Client", testRunAttributes, changedComponents);
             var finishTestRun = new FinishTestRun(Status.FAILED);
@@ -75,7 +75,7 @@ namespace Orangebeard.Client.Tests
             var client = new OrangebeardV2Client(config.Endpoint, new Guid(config.AccessToken), config.ProjectName, "Testset name", true);
 
             var testRunAttributes = new HashSet<Attribute>() { new Attribute("Test-Run-Key-1", "Test-Run-Value-1"), new Attribute("Test-Run-Value-Only-Attribute") };
-            //TODO!+ testRunAttributes.UnionWith(config.Attributes);
+            testRunAttributes.UnionWith(config.Attributes);
             var changedComponents = new HashSet<ChangedComponent>() { new ChangedComponent("Changed-Component-Name-1", "Changed-Component-Version-1") };
             var startTestRun = new StartTestRun("E2E test nieuwe .NET client", "Test update testrun attributes", testRunAttributes, changedComponents);
             var finishTestRun = new FinishTestRun(Status.PASSED);

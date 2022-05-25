@@ -155,7 +155,10 @@ namespace Orangebeard.Client.OrangebeardProperties
                 }
                 else
                 {
-                    attributes.Add(new Entities.Attribute(value: attribute));
+                    if (!string.IsNullOrWhiteSpace(attribute))
+                    {
+                        attributes.Add(new Entities.Attribute(value: attribute.Trim()));
+                    }
                 }
             }
 
