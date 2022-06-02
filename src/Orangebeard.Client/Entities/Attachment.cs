@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Orangebeard.Client.Entities
 {
@@ -32,7 +33,14 @@ namespace Orangebeard.Client.Entities
             {
                 Name = fileInfo.Name;
                 Content = System.IO.File.ReadAllBytes(fileInfo.FullName);
-                ContentType = Orangebeard.Shared.MimeTypes.MimeTypeMap.GetMimeType(fileInfo.Extension);
+                ContentType = Shared.MimeTypes.MimeTypeMap.GetMimeType(fileInfo.Extension);
+            }
+
+            public AttachmentFile(string fileName, string contentType, byte[] data)
+            {
+                Name = fileName;
+                Content = data.ToArray();
+                ContentType = contentType;
             }
 
             [JsonProperty("name")]
