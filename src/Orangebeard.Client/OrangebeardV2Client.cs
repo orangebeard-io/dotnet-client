@@ -1,36 +1,32 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Orangebeard.Client.Entities;
 using Orangebeard.Client.OrangebeardProperties;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orangebeard.Client
 {
     public class OrangebeardV2Client : AbstractClient
     {
-        //private readonly ILogger<OrangebeardV2Client> LOGGER;
+        private readonly ILog LOGGER = LogManager.GetLogger("OrangebeardV2Client");
 
         private bool connectionWithOrangebeardIsValid = false;
         private readonly OrangebeardConfiguration config;
 
         private OrangebeardV2Client()
         {
-            //var loggerFactory = (ILoggerFactory)new LoggerFactory();
-            //LOGGER = loggerFactory.CreateLogger<OrangebeardV2Client>();
         }
 
         private void Init(string endpoint, Guid uuid)
         {
             InitializeHttpClient(new Uri(endpoint), uuid.ToString(), null);
 
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; //TODO?- Not sure if this is still necessary.
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
         }
 
@@ -70,7 +66,7 @@ namespace Orangebeard.Client
                 }
                 catch (Exception)
                 {
-                    //LOGGER.LogError("The connection with Orangebeard could not be established! Check the properties and try again!");
+                    LOGGER.Error("The connection with Orangebeard could not be established! Check the properties and try again!");
                     connectionWithOrangebeardIsValid = false;
                 }
             }
@@ -89,7 +85,7 @@ namespace Orangebeard.Client
             }
             else
             {
-                //LOGGER.LogWarning("The connection with Orangebeard could not be established!");
+                LOGGER.Warn("The connection with Orangebeard could not be established!");
             }
         }
 
@@ -101,12 +97,11 @@ namespace Orangebeard.Client
                 Uri uri = new Uri($"{config.Endpoint}/listener/v2/{config.ProjectName}/launch/{testRunUUID}/finish");
                 string json = JsonConvert.SerializeObject(finishTestRun);
                 StringContent content = new StringContent(json, System.Text.Encoding.UTF8, AbstractClient.APPLICATION_JSON);
-                //httpClient.PutAsync(uri, content);
                 _ = httpClient.PutAsync(uri, content).Result;
             }
             else
             {
-                //LOGGER.LogWarning("The connection with Orangebeard could not be established!");
+                LOGGER.Warn("The connection with Orangebeard could not be established!");
             }
         }
 
@@ -140,7 +135,7 @@ namespace Orangebeard.Client
             }
             else
             {
-                //LOGGER.LogWarning("The connection with Orangebeard could not be established!");
+                LOGGER.Warn("The connection with Orangebeard could not be established!");
             }
             return null;
         }
@@ -154,11 +149,11 @@ namespace Orangebeard.Client
                 string json = JsonConvert.SerializeObject(finishTestItem);
                 StringContent content = new StringContent(json, System.Text.Encoding.UTF8, AbstractClient.APPLICATION_JSON);
                 var result = httpClient.PutAsync(uri, content).Result;
-                string jsonResponseString = result.Content.ReadAsStringAsync().Result;
+                _ = result.Content.ReadAsStringAsync().Result;
             }
             else
             {
-                //LOGGER.LogWarning("The connection with Orangebeard could not be established!");
+                LOGGER.Warn("The connection with Orangebeard could not be established!");
             }
         }
 
@@ -197,12 +192,12 @@ namespace Orangebeard.Client
                         Log anyLog = iterator.Current;
                         logDetails = $"One of the logs that cannot be reported Uuid=[{anyLog.ItemUuid}]; loglevel=[{anyLog.LogLevel}]; message=[{anyLog.Message}] ";
                     }
-                    //LOGGER.LogError($"Logs cannot be reported to Orangebeard. {logDetails}{exc}");
+                    LOGGER.Error($"Logs cannot be reported to Orangebeard. {logDetails}{exc}");
                 }
             }
             else
             {
-                //LOGGER.LogWarning("The connection with Orangebeard could not be established!");
+                LOGGER.Warn("The connection with Orangebeard could not be established!");
             }
         }
 
@@ -241,17 +236,11 @@ namespace Orangebeard.Client
             }
             else
             {
-                //LOGGER.LogWarning("The connection with Orangebeard could not be established!");
+                LOGGER.Warn("The connection with Orangebeard could not be established!");
             }
         }
 
         #endregion
-
-        #region Auxiliary methods
-
-
-        #endregion
-
 
     }
 }

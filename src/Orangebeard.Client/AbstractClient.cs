@@ -1,5 +1,6 @@
 ﻿using Orangebeard.Client.Entities;
 using Orangebeard.Client.Extensions;
+using Orangebeard.Shared.MimeTypes;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,7 +11,7 @@ namespace Orangebeard.Client
 {
     abstract public class AbstractClient : IOrangebeardClient
     {
-        public static readonly string APPLICATION_JSON = "application/json"; //TODO?~ Get this from the MIME Type map.
+        public static readonly string APPLICATION_JSON = MimeTypeMap.GetMimeType(".json");
 
         protected HttpClient httpClient = new HttpClient();
 
@@ -39,8 +40,7 @@ namespace Orangebeard.Client
             httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-            //TODO?- This probably isn't needed anymore.
-            /*
+
             if (userAgentPostFix != null)
             {
                 httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter/" +
@@ -52,7 +52,6 @@ namespace Orangebeard.Client
                 httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Reporter" +
                     typeof(OrangebeardV2Client).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
             }
-            */
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Orangebeard.Client.Abstractions.Models;
-using Orangebeard.Shared.Configuration;
+﻿using Orangebeard.Shared.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -2,9 +2,6 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orangebeard.Client.Entities
 {
@@ -19,9 +16,6 @@ namespace Orangebeard.Client.Entities
 
         [JsonProperty("name")]
         public string Name { get; private set; }
-
-        [JsonProperty("codeRef")]
-        public string CodeRef { get; private set; }
 
         [JsonProperty("description")]
         public string Description { get; private set; }
