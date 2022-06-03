@@ -9,7 +9,7 @@ namespace Orangebeard.Client.OrangebeardProperties
 {
     public class OrangebeardConfiguration
     {
-        public string Endpoint { get; private set; }
+        public Uri Endpoint { get; private set; }
         public string AccessToken { get; private set; }
         public string ProjectName { get; private set; }
         public string TestSetName { get; private set; }
@@ -32,7 +32,7 @@ namespace Orangebeard.Client.OrangebeardProperties
 
         public OrangebeardConfiguration(IConfiguration config)
         {
-            Endpoint = config.GetValue<string>(ConfigurationPath.ServerUrl);
+            Endpoint = new Uri(config.GetValue<string>(ConfigurationPath.ServerUrl));
             AccessToken = config.GetValue<string>(ConfigurationPath.ServerAuthenticationUuid);
             ProjectName = config.GetValue<string>(ConfigurationPath.ServerProject);
             TestSetName = config.GetValue<string>(ConfigurationPath.TestSetName);
@@ -62,6 +62,14 @@ namespace Orangebeard.Client.OrangebeardProperties
 
         public OrangebeardConfiguration(string endpoint, Guid uuid, string projectName, string testSetName)
         {
+            this.Endpoint = new Uri(endpoint);
+            this.AccessToken = uuid.ToString();
+            this.ProjectName = projectName.ToLower();
+            this.TestSetName = testSetName;
+        }
+
+        public OrangebeardConfiguration(Uri endpoint, Guid uuid, string projectName, string testSetName)
+        {
             this.Endpoint = endpoint;
             this.AccessToken = uuid.ToString();
             this.ProjectName = projectName.ToLower();
@@ -83,7 +91,7 @@ namespace Orangebeard.Client.OrangebeardProperties
         {
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_ENDPOINT.Replace(".", separator)) != null)
             {
-                Endpoint = Environment.GetEnvironmentVariable(ORANGEBEARD_ENDPOINT.Replace(".", separator));
+                Endpoint = new Uri(Environment.GetEnvironmentVariable(ORANGEBEARD_ENDPOINT.Replace(".", separator)));
             }
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_ACCESS_TOKEN.Replace(".", separator)) != null)
             {
@@ -113,7 +121,7 @@ namespace Orangebeard.Client.OrangebeardProperties
                 {
                     properties = PropertyFileLoader.Load(reader);
                 }
-                Endpoint = GetValueOrNull(properties, ORANGEBEARD_ENDPOINT);
+                Endpoint = new Uri(GetValueOrNull(properties, ORANGEBEARD_ENDPOINT));
                 AccessToken = GetValueOrNull(properties, ORANGEBEARD_ACCESS_TOKEN);
                 ProjectName = GetValueOrNull(properties, ORANGEBEARD_PROJECT);
                 TestSetName = GetValueOrNull(properties, ORANGEBEARD_TESTSET);
