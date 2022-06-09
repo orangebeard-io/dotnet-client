@@ -60,7 +60,6 @@ namespace Orangebeard.Client
                 try
                 {
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.AccessToken.ToString());
-                    //Uri uri = new Uri($"{config.Endpoint}/listener/v2/{config.ProjectName}/launch");
                     Uri uri = new Uri(config.Endpoint, $"listener/v2/{config.ProjectName}/launch");
                     string json = JsonConvert.SerializeObject(testRun);
                     StringContent content = new StringContent(json, System.Text.Encoding.UTF8, AbstractClient.APPLICATION_JSON);
@@ -86,7 +85,6 @@ namespace Orangebeard.Client
             if (connectionWithOrangebeardIsValid)
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.AccessToken.ToString());
-                //Uri uri = new Uri($"{config.Endpoint}/listener/v2/{config.ProjectName}/launch/{testRunUUID}/update");
                 Uri uri = new Uri(config.Endpoint, $"listener/v2/{config.ProjectName}/launch/{testRunUUID}/update");
                 String json = JsonConvert.SerializeObject(updateTestRun);
                 StringContent content = new StringContent(json, System.Text.Encoding.UTF8, AbstractClient.APPLICATION_JSON);
@@ -103,7 +101,6 @@ namespace Orangebeard.Client
             if (connectionWithOrangebeardIsValid)
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.AccessToken.ToString());
-                //Uri uri = new Uri($"{config.Endpoint}/listener/v2/{config.ProjectName}/launch/{testRunUUID}/finish");
                 Uri uri = new Uri(config.Endpoint, $"/listener/v2/{config.ProjectName}/launch/{testRunUUID}/finish");
                 string json = JsonConvert.SerializeObject(finishTestRun);
                 StringContent content = new StringContent(json, System.Text.Encoding.UTF8, AbstractClient.APPLICATION_JSON);
@@ -127,12 +124,10 @@ namespace Orangebeard.Client
                 Uri uri;
                 if (suiteId == null)
                 {
-                    //uri = new Uri($"{config.Endpoint}/listener/v2/{config.ProjectName}/item");
                     uri = new Uri(config.Endpoint, $"listener/v2/{config.ProjectName}/item");
                 }
                 else
                 {
-                    //uri = new Uri($"{config.Endpoint}/listener/v2/{config.ProjectName}/item/{suiteId}");
                     uri = new Uri(config.Endpoint, $"listener/v2/{config.ProjectName}/item/{suiteId}");
                 }
 
@@ -157,7 +152,6 @@ namespace Orangebeard.Client
             if (connectionWithOrangebeardIsValid)
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.AccessToken.ToString());
-                //Uri uri = new Uri($"{config.Endpoint}/listener/v2/{config.ProjectName}/item/{itemId}");
                 Uri uri = new Uri(config.Endpoint, $"/listener/v2/{config.ProjectName}/item/{itemId}");
                 string json = JsonConvert.SerializeObject(finishTestItem);
                 StringContent content = new StringContent(json, System.Text.Encoding.UTF8, AbstractClient.APPLICATION_JSON);
@@ -193,7 +187,6 @@ namespace Orangebeard.Client
 
                 try
                 {
-                    //Uri uri = new Uri($"{config.Endpoint}/listener/v2/{config.ProjectName}/log");
                     Uri uri = new Uri(config.Endpoint, $"/listener/v2/{config.ProjectName}/log");
                     var result = httpClient.PostAsync(uri, content).Result;
                 }
@@ -244,7 +237,6 @@ namespace Orangebeard.Client
 
                 // Send the contents to the server.
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.AccessToken.ToString());
-                //var result = httpClient.PostAsync($"{config.Endpoint}/listener/v2/{config.ProjectName}/log", content).Result;
                 var result = httpClient.PostAsync(new Uri(config.Endpoint, $"listener/v2/{config.ProjectName}/log"), content).Result;
 
                 _ = result.Content.ReadAsStringAsync().Result;

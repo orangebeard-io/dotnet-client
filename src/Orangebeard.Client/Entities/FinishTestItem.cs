@@ -21,7 +21,7 @@ namespace Orangebeard.Client.Entities
         public String Description { get; private set; }
 
         [JsonProperty("attributes")]
-        public ISet<Attribute> Attributes { get; private set; }
+        public ISet<Attribute> Attributes { get; private set; } = new HashSet<Attribute>();
 
         public FinishTestItem(Guid testRunUUID, Status status, String description, ISet<Attribute> attributes)
         {
