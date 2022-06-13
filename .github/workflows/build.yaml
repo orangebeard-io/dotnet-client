@@ -1,4 +1,4 @@
-name: Build DLL
+name: Build
 
 on:
   push:
@@ -13,9 +13,10 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2    
     - name: Setup dotnet
       uses: actions/setup-dotnet@v2     
+    - uses: actions/checkout@v2
     
     - name: NuGet PKG Restore
-      run: msbuild -t:restore
+      run: msbuild -t:restore src/Orangebeard.Client/Orangebeard.Client.sln
     
     - name: Build
       run: msbuild
