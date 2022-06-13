@@ -16,10 +16,10 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: NuGet PKG Restore
-      run: msbuild -t:restore src/Orangebeard.Client/Orangebeard.Client.sln
+      run: msbuild -t:restore Orangebeard.Client.sln
     
     - name: Build
-      run: msbuild
+      run: msbuild Orangebeard.Client.sln
     
     - name: Test
       run: dotnet test 
