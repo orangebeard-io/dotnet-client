@@ -26,13 +26,18 @@ namespace Orangebeard.Client.Entities
         [JsonProperty("level")]
         public LogLevel LogLevel { get; private set; }
 
-        public Log(Guid testRunUUID, Guid testItemUUID, LogLevel logLevel, String message)
+        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty("logFormat")]
+        public LogFormat LogFormat { get; private set; }
+
+        public Log(Guid testRunUUID, Guid testItemUUID, LogLevel logLevel, String message, LogFormat logFormat)
         {
             this.ItemUuid = testItemUUID;
             this.TestRunUUID = testRunUUID;
             this.LogLevel = logLevel;
             this.Time = DateTime.Now;
             this.Message = message;
+            this.LogFormat = logFormat; 
         }
     }
 }
