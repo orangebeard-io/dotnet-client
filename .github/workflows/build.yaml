@@ -1,0 +1,25 @@
+name: Build
+
+on:
+  push:
+    branches-ignore:
+      - 'master'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2    
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v2     
+    - uses: actions/checkout@v2
+    
+    - name: NuGet PKG Restore
+      run: msbuild -t:restore Orangebeard.Client.sln
+    
+    - name: Build
+      run: msbuild Orangebeard.Client.sln
+    
+    - name: Test
+      run: dotnet test 

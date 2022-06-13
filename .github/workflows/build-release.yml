@@ -26,7 +26,7 @@ jobs:
         proj-path: src\Orangebeard.Client\Orangebeard.Client.csproj
     
     - name: NuGet PKG Restore
-      run: msbuild -t:restore src/Orangebeard.Client/Orangebeard.Client.sln
+      run: msbuild -t:restore Orangebeard.Client.sln
     
     - name: Build
       run: msbuild src/Orangebeard.Client/Orangebeard.Client.csproj /p:Configuration=Release /p:NoWarn=1591
