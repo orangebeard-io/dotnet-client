@@ -14,6 +14,7 @@ namespace Orangebeard.Client.Tests
     /// Note that this is improper use of the unit-testing framework.
     /// </summary>
     [TestClass()]
+    [Ignore]
     public class IntegrationTest
     {
         //private readonly string propertiesFile = @"orangebeard.properties";

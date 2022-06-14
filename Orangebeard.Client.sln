@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orangebeard.Client", "Orangebeard.Client.csproj", "{A5E6E082-44EF-4A20-8321-55B273E64C11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orangebeard.Client", "src\Orangebeard.Client\Orangebeard.Client.csproj", "{A5E6E082-44EF-4A20-8321-55B273E64C11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orangebeard.ClientTests", "..\Orangebeard.ClientTests\Orangebeard.ClientTests.csproj", "{90D3863C-C7FA-48DE-88AE-9F521EA2A96B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orangebeard.ClientTests", "src\Orangebeard.ClientTests\Orangebeard.ClientTests.csproj", "{90D3863C-C7FA-48DE-88AE-9F521EA2A96B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
