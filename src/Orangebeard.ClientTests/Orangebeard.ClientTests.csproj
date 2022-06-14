@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <Version>2.0.0.1</Version>
+    <Version>2.0.0.2</Version>
 
     <Authors>Serge Barth</Authors>
   </PropertyGroup>
