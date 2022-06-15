@@ -49,8 +49,8 @@ namespace Orangebeard.Client.Tests
             //var updateTestRun = new UpdateTestRun("Updated description", testRunUpdateAttributes);
             //client.UpdateTestRun(testRunId.Value, updateTestRun);
 
-            var log1 = new Log(testRunId.Value, testId.Value, LogLevel.warn, "Logging a warning (1).");
-            var log2 = new Log(testRunId.Value, testId.Value, LogLevel.warn, "Logging a warning (2).");
+            var log1 = new Log(testRunId.Value, testId.Value, LogLevel.warn, "Logging a warning (1).", LogFormat.PLAIN_TEXT);
+            var log2 = new Log(testRunId.Value, testId.Value, LogLevel.warn, "Logging a warning (2).", LogFormat.HTML);
             var logSet = new HashSet<Log>() { log1, log2 };
             client.Log(logSet);
 
