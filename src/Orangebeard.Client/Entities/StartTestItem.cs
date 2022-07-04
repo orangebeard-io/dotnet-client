@@ -37,6 +37,7 @@ namespace Orangebeard.Client.Entities
             this.StartTime = DateTime.Now;
             this.Description = description;
             this.Attributes = attributes ?? new HashSet<Attribute>();
+            this.CountAsTestItem = (type == TestItemType.STEP) ? false : true;
         }
     }
 }
