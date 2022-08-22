@@ -20,6 +20,12 @@ namespace Orangebeard.Client.Abstractions.Requests
         public string Description { get; set; }
 
         /// <summary>
+        /// ID of parent launch of this test item.
+        /// </summary>
+        [DataMember(Name = "launchUuid")]
+        public string LaunchUuid { get; set; }
+
+        /// <summary>
         /// Date time when test item is finished.
         /// </summary>
         [DataMember(Name = "endTime")]

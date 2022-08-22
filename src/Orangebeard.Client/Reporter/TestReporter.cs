@@ -128,7 +128,7 @@ namespace Orangebeard.Shared.Reporter
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             TraceLogger.Verbose($"Scheduling request to finish test item in {GetHashCode()} proxy instance");
-
+                  
             if (StartTask == null)
             {
                 var exp = new InsufficientExecutionStackException("The test item wasn't scheduled for starting to finish it properly.");
@@ -210,6 +210,8 @@ namespace Orangebeard.Shared.Reporter
 
                     _testInfo.FinishTime = request.EndTime;
                     _testInfo.Status = request.Status;
+
+                    request.LaunchUuid = LaunchReporter.Info.Uuid;
 
                     if (request.EndTime < Info.StartTime)
                     {

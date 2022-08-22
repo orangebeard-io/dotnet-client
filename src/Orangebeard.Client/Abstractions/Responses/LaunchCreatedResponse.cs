@@ -9,6 +9,6 @@ namespace Orangebeard.Client.Abstractions.Responses
         public string Uuid { get; set; }
 
         [DataMember(Name = "number")]
-        public long Number { get; set; }
+        public long? Number { get; set; }
     }
 }

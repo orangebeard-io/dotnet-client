@@ -19,6 +19,7 @@ namespace Orangebeard.Shared.Reporter
             }
 
             request.TestItemUuid = _testReporter.Info.Uuid;
+            request.LaunchUuid = _testReporter.LaunchReporter.Info.Uuid;
         }
     }
 }

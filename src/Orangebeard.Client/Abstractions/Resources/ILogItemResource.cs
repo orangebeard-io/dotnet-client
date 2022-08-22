@@ -1,7 +1,6 @@
 ﻿using Orangebeard.Client.Abstractions.Filtering;
 using Orangebeard.Client.Abstractions.Requests;
 using Orangebeard.Client.Abstractions.Responses;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Orangebeard.Client.Abstractions.Resources
