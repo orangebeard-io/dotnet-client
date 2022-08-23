@@ -335,6 +335,7 @@ namespace Orangebeard.Shared.Reporter
             return newTestNode;
         }
 
+        [Obsolete("Logs should be sent to a test and not the testrun!")]
         public void Log(CreateLogItemRequest createLogItemRequest)
         {
             if (StartTask == null)
