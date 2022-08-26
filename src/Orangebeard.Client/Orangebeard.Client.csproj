@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net462;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <PackageId>Orangebeard.Client</PackageId>
-    <Version>2.0.0.5</Version>
+    <Version>2.1.0.0</Version>
     <Description>API client for Orangebeard</Description>
-    <Authors>Tom Heintzberger; Serge Barth</Authors>
+    <Authors>Tom Heintzberger</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://orangebeard.io</PackageProjectUrl>
     <PackageIcon>beard.png</PackageIcon>
@@ -28,15 +28,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="System.Net.Http" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\..\beard.png" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.14" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
 </Project>

@@ -10,8 +10,6 @@ Coverage.xml
 *.userosscache
 *.sln.docstates
 
-orangebeard.properties
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

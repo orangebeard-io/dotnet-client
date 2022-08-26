@@ -1,4 +1,5 @@
-﻿using Orangebeard.Shared.Configuration;
+﻿using Orangebeard.Client.Abstractions.Models;
+using Orangebeard.Shared.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,13 +10,13 @@ namespace Orangebeard.Client.OrangebeardProperties
 {
     public class OrangebeardConfiguration
     {
-        public Uri Endpoint { get; private set; }
+        public string Endpoint { get; private set; }
         public string AccessToken { get; private set; }
         public string ProjectName { get; private set; }
         public string TestSetName { get; private set; }
         public string Description { get; private set; }
         public string ListenerIdentification { get; private set; }
-        public ISet<Entities.Attribute> Attributes { get; private set; }
+        public ISet<ItemAttribute> Attributes { get; private set; }
         public IList<string> FileUploadPatterns { get; private set; }
 
         public OrangebeardConfiguration(string propertyFile)
@@ -32,19 +33,12 @@ namespace Orangebeard.Client.OrangebeardProperties
 
         public OrangebeardConfiguration(IConfiguration config)
         {
-            Endpoint = new Uri(config.GetValue<string>(ConfigurationPath.ServerUrl));
+            Endpoint = config.GetValue<string>(ConfigurationPath.ServerUrl);
             AccessToken = config.GetValue<string>(ConfigurationPath.ServerAuthenticationUuid);
             ProjectName = config.GetValue<string>(ConfigurationPath.ServerProject);
             TestSetName = config.GetValue<string>(ConfigurationPath.TestSetName);
             Description = config.GetValue<string>(ConfigurationPath.TestSetDescription);
-            Attributes = new HashSet<Entities.Attribute>(
-                config.GetKeyValues(
-                    ConfigurationPath.Attributes, 
-                    new HashSet<KeyValuePair<string, string>>()
-                )
-                .Select(a => new Entities.Attribute(a.Key, a.Value))
-                //.ToList()
-            );
+            Attributes = new HashSet<ItemAttribute>(config.GetKeyValues(ConfigurationPath.Attributes, new HashSet<KeyValuePair<string, string>>()).Select(a => new ItemAttribute { Key = a.Key, Value = a.Value }).ToList());
             if (!RequiredPropertiesArePresent())
             {
                 throw new OrangebeardConfigurationException("Not all required configuration properties (Endpoint, AccessToken, ProjectName, TestSetName) are present!");
@@ -58,22 +52,6 @@ namespace Orangebeard.Client.OrangebeardProperties
             ReadEnvironmentVariables(".");
             ReadEnvironmentVariables("_");
             ProjectName = ProjectName.ToLower();
-        }
-
-        public OrangebeardConfiguration(string endpoint, Guid uuid, string projectName, string testSetName)
-        {
-            this.Endpoint = new Uri(endpoint);
-            this.AccessToken = uuid.ToString();
-            this.ProjectName = projectName.ToLower();
-            this.TestSetName = testSetName;
-        }
-
-        public OrangebeardConfiguration(Uri endpoint, Guid uuid, string projectName, string testSetName)
-        {
-            this.Endpoint = endpoint;
-            this.AccessToken = uuid.ToString();
-            this.ProjectName = projectName.ToLower();
-            this.TestSetName = testSetName;
         }
 
         public OrangebeardConfiguration WithListenerIdentification(string ListenerIdentification)
@@ -91,7 +69,7 @@ namespace Orangebeard.Client.OrangebeardProperties
         {
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_ENDPOINT.Replace(".", separator)) != null)
             {
-                Endpoint = new Uri(Environment.GetEnvironmentVariable(ORANGEBEARD_ENDPOINT.Replace(".", separator)));
+                Endpoint = Environment.GetEnvironmentVariable(ORANGEBEARD_ENDPOINT.Replace(".", separator));
             }
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_ACCESS_TOKEN.Replace(".", separator)) != null)
             {
@@ -121,33 +99,22 @@ namespace Orangebeard.Client.OrangebeardProperties
                 {
                     properties = PropertyFileLoader.Load(reader);
                 }
-                Endpoint = new Uri(GetValueOrNull(properties, ORANGEBEARD_ENDPOINT));
+                Endpoint = GetValueOrNull(properties, ORANGEBEARD_ENDPOINT);
                 AccessToken = GetValueOrNull(properties, ORANGEBEARD_ACCESS_TOKEN);
                 ProjectName = GetValueOrNull(properties, ORANGEBEARD_PROJECT);
                 TestSetName = GetValueOrNull(properties, ORANGEBEARD_TESTSET);
                 Description = GetValueOrNull(properties, ORANGEBEARD_DESCRIPTION);
                 Attributes = ExtractAttributes(GetValueOrNull(properties, ORANGEBEARD_ATTRIBUTES));
-
-                var uploadPatterns = GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS);
-                if (uploadPatterns != null)
-                {
-                    FileUploadPatterns = new List<string>(uploadPatterns.Split(';'));
-                }
-                else
-                {
-                    FileUploadPatterns = new List<string>();
-                }
-
-
+                FileUploadPatterns = new List<string>(GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS).Split(';'));
             } catch (FileNotFoundException)
             {
                 //ignore
             }
         }
 
-        private ISet<Entities.Attribute> ExtractAttributes(string attributeList)
+        private ISet<ItemAttribute> ExtractAttributes(string attributeList)
         {
-            ISet<Entities.Attribute> attributes = new HashSet<Entities.Attribute>();
+            ISet<ItemAttribute> attributes = new HashSet<ItemAttribute>();
             if (attributeList == null)
             {
                 return attributes;
@@ -158,14 +125,11 @@ namespace Orangebeard.Client.OrangebeardProperties
                 if (attribute.Contains(":"))
                 {
                     string[] keyVal = attribute.Split(':');
-                    attributes.Add(new Entities.Attribute(key: keyVal[0].Trim(), value: keyVal[1].Trim()));
+                    attributes.Add(new ItemAttribute { Key = keyVal[0].Trim(), Value = keyVal[1].Trim() });
                 }
                 else
                 {
-                    if (!string.IsNullOrWhiteSpace(attribute))
-                    {
-                        attributes.Add(new Entities.Attribute(value: attribute.Trim()));
-                    }
+                    attributes.Add(new ItemAttribute { Value = attribute });
                 }
             }
 
