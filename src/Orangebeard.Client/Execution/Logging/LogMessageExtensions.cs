@@ -6,7 +6,9 @@ namespace Orangebeard.Shared.Execution.Logging
 {
     public static class LogMessageExtensions
     {
-        public static CreateLogItemRequest ConvertToRequest(this ILogMessage logMessage)
+        public static CreateLogItemRequest ConvertToRequest(this ILogMessage logMessage) { return ConvertToRequest(logMessage, LogFormat.PLAIN_TEXT); }
+        
+        public static CreateLogItemRequest ConvertToRequest(this ILogMessage logMessage, LogFormat defaultFormat)
         {
             if (logMessage == null) throw new ArgumentNullException("Cannot convert nullable log message object.", nameof(logMessage));
 
@@ -40,7 +42,8 @@ namespace Orangebeard.Shared.Execution.Logging
             {
                 Text = logMessage.Message,
                 Time = logMessage.Time,
-                Level = logLevel
+                Level = logLevel,
+                Format = (int)logLevel < (int)LogLevel.Error ? defaultFormat : LogFormat.PLAIN_TEXT
             };
 
             if (logMessage.Attachment != null)

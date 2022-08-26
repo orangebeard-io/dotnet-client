@@ -50,6 +50,14 @@ namespace Orangebeard.Client.Abstractions.Requests
         public LogLevel Level { get; set; } = LogLevel.Info;
 
         /// <summary>
+        /// The format of the log
+        /// </summary>
+        [DataMember(Name = "logFormat")]
+        public string FormatString { get { return EnumConverter.ConvertFrom(Format); } set { Format = EnumConverter.ConvertTo<LogFormat>(value); } }
+
+        public LogFormat Format { get; set; } = LogFormat.PLAIN_TEXT;
+
+        /// <summary>
         /// Message of log item.
         /// </summary>
         [DataMember(Name = "message")]
