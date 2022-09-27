@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.1;netcoreapp3.1</TargetFrameworks>
@@ -27,12 +27,15 @@
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net462'))" >
+	<Reference Include="System.Net.Http" Version="4.0.0.0" />
+  </ItemGroup>
+	
   <ItemGroup>
     <None Include="..\..\beard.png" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
 </Project>
