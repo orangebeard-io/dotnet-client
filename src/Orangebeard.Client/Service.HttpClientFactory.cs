@@ -32,10 +32,6 @@ namespace Orangebeard.Client
             {
                 var httpClientHandler = new HttpClientHandler();
 
-#if !NET45
-                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
-#endif
-
                 var httpClient = new HttpClient(httpClientHandler);
 
                 httpClient.BaseAddress = _baseUri.Normalize();
