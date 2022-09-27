@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <PackageId>Orangebeard.Client</PackageId>
-    <Version>2.1.1.0</Version>
+    <Version>2.1.2.0</Version>
     <Description>API client for Orangebeard</Description>
     <Authors>Tom Heintzberger</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
