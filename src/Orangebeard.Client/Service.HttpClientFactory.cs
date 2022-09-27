@@ -31,7 +31,7 @@ namespace Orangebeard.Client
             public HttpClient Create()
             {
                 var httpClientHandler = new HttpClientHandler();
-#if !NET462
+#if !NETFRAMEWORK
                 httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
 #endif
 
