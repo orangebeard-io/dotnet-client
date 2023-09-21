@@ -83,6 +83,14 @@ namespace Orangebeard.Client.OrangebeardProperties
             {
                 TestSetName = Environment.GetEnvironmentVariable(ORANGEBEARD_TESTSET.Replace(".", separator));
             }
+            if (Environment.GetEnvironmentVariable(ORANGEBEARD_DESCRIPTION.Replace(".", separator)) != null)
+            {
+                Description = Environment.GetEnvironmentVariable(ORANGEBEARD_DESCRIPTION.Replace(".", separator));
+            }
+            if (Environment.GetEnvironmentVariable(ORANGEBEARD_ATTRIBUTES.Replace(".", separator)) != null)
+            {
+                Attributes = ExtractAttributes(Environment.GetEnvironmentVariable(ORANGEBEARD_ATTRIBUTES.Replace(".", separator)));
+            }
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_FILEUPLOAD_PATTERNS.Replace(".", separator)) != null)
             {
                 string patternList = Environment.GetEnvironmentVariable(ORANGEBEARD_FILEUPLOAD_PATTERNS.Replace(".", separator));
