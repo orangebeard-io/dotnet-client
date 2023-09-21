@@ -91,6 +91,19 @@ namespace Orangebeard.Client.OrangebeardProperties
             {
                 Attributes = ExtractAttributes(Environment.GetEnvironmentVariable(ORANGEBEARD_ATTRIBUTES.Replace(".", separator)));
             }
+            if (Environment.GetEnvironmentVariable(ORANGEBEARD_REF_URL.Replace(".", separator)) != null)
+            {
+                var ref_url_attribute = new ItemAttribute { Key = "reference_url", Value = Environment.GetEnvironmentVariable(ORANGEBEARD_REF_URL.Replace(".", separator)) };
+                
+                if (Attributes == null)
+                {
+                    Attributes = new HashSet<ItemAttribute> { ref_url_attribute };
+                }
+                else
+                {
+                    Attributes.Add(ref_url_attribute);
+                }
+            }
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_FILEUPLOAD_PATTERNS.Replace(".", separator)) != null)
             {
                 string patternList = Environment.GetEnvironmentVariable(ORANGEBEARD_FILEUPLOAD_PATTERNS.Replace(".", separator));
@@ -114,6 +127,12 @@ namespace Orangebeard.Client.OrangebeardProperties
                 Description = GetValueOrNull(properties, ORANGEBEARD_DESCRIPTION);
                 Attributes = ExtractAttributes(GetValueOrNull(properties, ORANGEBEARD_ATTRIBUTES));
                 FileUploadPatterns = new List<string>(GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS).Split(';'));
+
+                if (GetValueOrNull(properties, ORANGEBEARD_REF_URL) != null)
+                {
+                    Attributes.Add(new ItemAttribute { Key = "reference_url", Value = GetValueOrNull(properties, ORANGEBEARD_REF_URL) });
+                }
+
             } catch (FileNotFoundException)
             {
                 //ignore
