@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+// ReSharper disable StringLiteralTypo
 
 namespace Orangebeard.Client.V3.MimeTypes
 {
@@ -8,11 +9,11 @@ namespace Orangebeard.Client.V3.MimeTypes
     /// </summary>
     public static class MimeTypeMap
     {
-        private static Dictionary<string, string> _mappings;
+        private static readonly Dictionary<string, string> Mappings;
 
         static MimeTypeMap()
         {
-            _mappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            Mappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 {".323", "text/h323"},
                 {".3g2", "video/3gpp2"},
@@ -646,7 +647,7 @@ namespace Orangebeard.Client.V3.MimeTypes
                 extension = "." + extension;
             }
 
-            return _mappings.TryGetValue(extension, out string mime) ? mime : "application/octet-stream";
+            return Mappings.TryGetValue(extension, out string mime) ? mime : "application/octet-stream";
         }
     }
 }

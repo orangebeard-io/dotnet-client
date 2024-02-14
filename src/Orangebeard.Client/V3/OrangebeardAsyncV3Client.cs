@@ -23,12 +23,14 @@ namespace Orangebeard.Client.V3
 
         public OrangebeardAsyncV3Client(OrangebeardConfiguration config)
         {
-            _client = new OrangebeardV3Client(config.Endpoint, Guid.Parse(config.AccessToken), config.ProjectName, true);
+            _client = new OrangebeardV3Client(config.Endpoint, Guid.Parse(config.AccessToken), config.ProjectName,
+                true);
             _tasks = new ConcurrentDictionary<Guid?, TaskCompletionSource<object>>();
             _guidMap = new ConcurrentDictionary<Guid, Guid>();
         }
 
-        public OrangebeardAsyncV3Client(string endpoint, Guid accessToken, string projectName, bool connectionWithOrangebeardIsValid)
+        public OrangebeardAsyncV3Client(string endpoint, Guid accessToken, string projectName,
+            bool connectionWithOrangebeardIsValid)
         {
             _client = new OrangebeardV3Client(endpoint, accessToken, projectName, connectionWithOrangebeardIsValid);
             _tasks = new ConcurrentDictionary<Guid?, TaskCompletionSource<object>>();
@@ -47,19 +49,20 @@ namespace Orangebeard.Client.V3
 
         public Guid StartTestRun(StartTestRun testRun)
         {
-            Guid temporaryUUID = Guid.NewGuid();
+            var temporaryUUID = Guid.NewGuid();
             _context = new TestRunContext(temporaryUUID);
             var startTestRunTask = new TaskCompletionSource<object>();
             _tasks.TryAdd(temporaryUUID, startTestRunTask);
 
             Task.Run(async () =>
             {
-                Guid? actualUUID = await _client.StartTestRun(testRun);
+                var actualUUID = await _client.StartTestRun(testRun);
                 if (actualUUID != null)
                 {
-                    _guidMap[temporaryUUID] = (Guid) actualUUID;
+                    _guidMap[temporaryUUID] = (Guid)actualUUID;
                     startTestRunTask.SetResult(actualUUID);
-                } else
+                }
+                else
                 {
                     startTestRunTask.SetCanceled();
                 }
@@ -76,9 +79,9 @@ namespace Orangebeard.Client.V3
 
             Task.Run(async () =>
             {
-               await _client.StartAnnouncedTestRun(testRunUUID);
-               _guidMap[testRunUUID] = testRunUUID;
-               startTestRunTask.SetResult(true);
+                await _client.StartAnnouncedTestRun(testRunUUID);
+                _guidMap[testRunUUID] = testRunUUID;
+                startTestRunTask.SetResult(true);
             });
         }
 
@@ -96,31 +99,32 @@ namespace Orangebeard.Client.V3
                     updateTestRunTask.SetResult(true);
                 });
             });
-            
         }
 
         public void FinishTestRun(Guid testRunUUID, FinishTestRun finishTestRun)
         {
-            int pendingTasks = _tasks.Values.Where(t => !t.Task.IsCompleted).Count();
-            Console.WriteLine("Waiting for {0}/{1} Orangebeard calls to finish...", pendingTasks, _tasks.Count()); 
-            Task.WhenAll(_tasks.Values.Select(task => task.Task).ToArray()).ContinueWith(parent =>
-            {
-                Console.WriteLine("Finishing run!");
-                Task.WaitAll(_client.FinishTestRun(_guidMap[testRunUUID], finishTestRun));
-            });
+            var pendingTasks = _tasks.Values.Count(t => !t.Task.IsCompleted);
+            Console.WriteLine("Waiting for {0}/{1} Orangebeard calls to finish...", pendingTasks, _tasks.Count());
+            Task.WhenAll(_tasks.Values.Select(task => task.Task))
+                .ContinueWith(parent =>
+                {
+                    Console.WriteLine("Finishing run!");
+                    Task.Run(() => _client.FinishTestRun(_guidMap[testRunUUID], finishTestRun)).Wait();
+                })
+                .Wait();
         }
 
         public List<Guid> StartSuite(StartSuite startSuite)
         {
-            List<Guid> tempUUIDs = startSuite.SuiteNames.Select(_ => Guid.NewGuid()).ToList();
+            var tempUUIDs = startSuite.SuiteNames.Select(_ => Guid.NewGuid()).ToList();
             _context.StartSuites(startSuite.SuiteNames, tempUUIDs);
 
-            TaskCompletionSource<object> startSuiteTask = new TaskCompletionSource<object>();
+            var startSuiteTask = new TaskCompletionSource<object>();
             tempUUIDs.ForEach(tempUUID => _tasks[tempUUID] = startSuiteTask);
 
-            TaskCompletionSource<object> parentTask = startSuite.ParentSuiteUUID != null ?
-                GetParentTask(startSuite.ParentSuiteUUID) :
-                GetParentTask(startSuite.TestRunUUID);
+            var parentTask = startSuite.ParentSuiteUUID != null
+                ? GetParentTask(startSuite.ParentSuiteUUID)
+                : GetParentTask(startSuite.TestRunUUID);
 
             parentTask.Task.ContinueWith(parent =>
             {
@@ -128,15 +132,15 @@ namespace Orangebeard.Client.V3
                 Guid? parentSuiteUUID = null;
                 if (startSuite.ParentSuiteUUID == null)
                 {
-                    testRunUUID = (Guid) parent.Result;
+                    testRunUUID = (Guid)parent.Result;
                 }
                 else
                 {
                     testRunUUID = _guidMap[startSuite.TestRunUUID];
-                    parentSuiteUUID = parent.Result is List<Guid> ? ((List<Guid>)parent.Result).Last() : (Guid)parent.Result;
+                    parentSuiteUUID = parent.Result is List<Guid> list ? list.Last() : (Guid)parent.Result;
                 }
 
-                StartSuite realStartSuite = new StartSuite()
+                var realStartSuite = new StartSuite()
                 {
                     TestRunUUID = testRunUUID,
                     ParentSuiteUUID = parentSuiteUUID,
@@ -147,8 +151,8 @@ namespace Orangebeard.Client.V3
 
                 Task.Run(async () =>
                 {
-                    List<Suite> suites = await _client.StartSuite(realStartSuite);
-                    List<Guid> actualUUIDs = suites.Select(suite => suite.SuiteUUID).ToList();
+                    var suites = await _client.StartSuite(realStartSuite);
+                    var actualUUIDs = suites.Select(suite => suite.SuiteUUID).ToList();
                     startSuiteTask.SetResult(actualUUIDs);
                 });
             });
@@ -158,19 +162,18 @@ namespace Orangebeard.Client.V3
 
         public Guid StartTest(StartTest startTest)
         {
-            Guid temporaryUUID = Guid.NewGuid();
+            var temporaryUUID = Guid.NewGuid();
             _context.StartTest(temporaryUUID);
-            
-            TaskCompletionSource<object> startTestTask = new TaskCompletionSource<object>();
+
+            var startTestTask = new TaskCompletionSource<object>();
             _tasks[temporaryUUID] = startTestTask;
 
-            TaskCompletionSource<object> parentTask = GetParentTask(startTest.SuiteUUID);
+            var parentTask = GetParentTask(startTest.SuiteUUID);
 
             parentTask.Task.ContinueWith(parent =>
             {
-                Guid parentSuiteUUID = ((List<Guid>)parent.Result).Last();
-
-                StartTest realStartTest = new StartTest()
+                var parentSuiteUUID = ((List<Guid>)parent.Result).Last();
+                var realStartTest = new StartTest()
                 {
                     TestRunUUID = _guidMap[startTest.TestRunUUID],
                     SuiteUUID = parentSuiteUUID,
@@ -183,10 +186,10 @@ namespace Orangebeard.Client.V3
 
                 Task.Run(async () =>
                 {
-                    Guid actualUUID = (Guid)await _client.StartTest(realStartTest);
-                    _guidMap[temporaryUUID] = actualUUID;
+                    var actualUUID = await _client.StartTest(realStartTest);
+                    _guidMap[temporaryUUID] = (Guid)actualUUID;
                     startTestTask.SetResult(actualUUID);
-                });                
+                });
             });
 
             return temporaryUUID;
@@ -195,14 +198,14 @@ namespace Orangebeard.Client.V3
         public void FinishTest(Guid testUUID, FinishTest finishTest)
         {
             _context.FinishTest(testUUID);
-            TaskCompletionSource<object> finishTestTask = new TaskCompletionSource<object>();
+            var finishTestTask = new TaskCompletionSource<object>();
             _tasks[Guid.NewGuid()] = finishTestTask;
 
-            TaskCompletionSource<object> parentTask = GetParentTask(testUUID);
+            var parentTask = GetParentTask(testUUID);
 
             parentTask.Task.ContinueWith(parent =>
             {
-            FinishTest realFinishTest = new FinishTest()
+                var realFinishTest = new FinishTest()
                 {
                     TestRunUUID = _guidMap[finishTest.TestRunUUID],
                     Status = finishTest.Status,
@@ -219,15 +222,15 @@ namespace Orangebeard.Client.V3
 
         public Guid StartStep(StartStep startStep)
         {
-            Guid temporaryUUID = Guid.NewGuid();
+            var temporaryUUID = Guid.NewGuid();
             _context.StartStep(temporaryUUID);
 
-            TaskCompletionSource<object> startStepTask = new TaskCompletionSource<object>();
+            var startStepTask = new TaskCompletionSource<object>();
             _tasks[temporaryUUID] = startStepTask;
 
-            TaskCompletionSource<object> parentTask = startStep.ParentStepUUID != null ?
-                GetParentTask(startStep.ParentStepUUID) :
-                GetParentTask(startStep.TestUUID);
+            var parentTask = startStep.ParentStepUUID != null
+                ? GetParentTask(startStep.ParentStepUUID)
+                : GetParentTask(startStep.TestUUID);
 
             parentTask.Task.ContinueWith(parent =>
             {
@@ -243,7 +246,7 @@ namespace Orangebeard.Client.V3
                     parentStepUUID = (Guid)parent.Result;
                 }
 
-                StartStep realStartStep = new StartStep()
+                var realStartStep = new StartStep()
                 {
                     TestRunUUID = _guidMap[startStep.TestRunUUID],
                     TestUUID = testUUID,
@@ -255,10 +258,10 @@ namespace Orangebeard.Client.V3
 
                 Task.Run(async () =>
                 {
-                    Guid actualUUID = (Guid)await _client.StartStep(realStartStep);
-                    _guidMap[temporaryUUID] = actualUUID;
+                    var actualUUID = await _client.StartStep(realStartStep);
+                    _guidMap[temporaryUUID] = (Guid)actualUUID;
                     startStepTask.SetResult(actualUUID);
-                });                
+                });
             });
 
             return temporaryUUID;
@@ -268,14 +271,14 @@ namespace Orangebeard.Client.V3
         {
             _context.FinishStep(stepUUID);
 
-            TaskCompletionSource<object> finishStepTask = new TaskCompletionSource<object>();
+            var finishStepTask = new TaskCompletionSource<object>();
             _tasks[Guid.NewGuid()] = finishStepTask;
 
-            TaskCompletionSource<object> parentTask = GetParentTask(stepUUID);
+            var parentTask = GetParentTask(stepUUID);
 
             parentTask.Task.ContinueWith(parent =>
             {
-                FinishStep realFinishStep = new FinishStep()
+                var realFinishStep = new FinishStep()
                 {
                     TestRunUUID = _guidMap[finishStep.TestRunUUID],
                     Status = finishStep.Status,
@@ -292,13 +295,11 @@ namespace Orangebeard.Client.V3
 
         public Guid Log(Log log)
         {
-            Guid temporaryUUID = Guid.NewGuid();
-            TaskCompletionSource<object> logTask = new TaskCompletionSource<object>();
+            var temporaryUUID = Guid.NewGuid();
+            var logTask = new TaskCompletionSource<object>();
             _tasks[temporaryUUID] = logTask;
 
-            TaskCompletionSource<object> parentTask = log.StepUUID != null ?
-                GetParentTask(log.StepUUID) :
-                GetParentTask(log.TestUUID);
+            var parentTask = log.StepUUID != null ? GetParentTask(log.StepUUID) : GetParentTask(log.TestUUID);
 
             parentTask.Task.ContinueWith(parent =>
             {
@@ -314,7 +315,7 @@ namespace Orangebeard.Client.V3
                     stepUUID = (Guid)parent.Result;
                 }
 
-                Log realLog = new Log()
+                var realLog = new Log()
                 {
                     TestRunUUID = _guidMap[log.TestRunUUID],
                     TestUUID = testUUID,
@@ -327,8 +328,8 @@ namespace Orangebeard.Client.V3
 
                 Task.Run(async () =>
                 {
-                    Guid actualUUID = (Guid) await _client.Log(realLog);
-                    _guidMap[temporaryUUID] = actualUUID;
+                    var actualUUID = await _client.Log(realLog);
+                    _guidMap[temporaryUUID] = (Guid)actualUUID;
                     logTask.SetResult(actualUUID);
                 });
             });
@@ -336,7 +337,7 @@ namespace Orangebeard.Client.V3
             return temporaryUUID;
         }
 
-        [Obsolete ("Use single async log calls to ensure synchronization. This method now acts as a forwarder")]
+        [Obsolete("Use single async log calls to ensure synchronization. This method now acts as a forwarder")]
         public void SendLogBatch(List<Log> logs)
         {
             logs.ForEach(l => Log(l));
@@ -344,16 +345,16 @@ namespace Orangebeard.Client.V3
 
         public Guid SendAttachment(Attachment attachment)
         {
-            Guid temporaryUUID = Guid.NewGuid();
-            AttachmentMetaData meta = attachment.MetaData;
-            TaskCompletionSource<object> attachmentTask = new TaskCompletionSource<object>();
+            var temporaryUUID = Guid.NewGuid();
+            var meta = attachment.MetaData;
+            var attachmentTask = new TaskCompletionSource<object>();
             _tasks[temporaryUUID] = attachmentTask;
 
-            TaskCompletionSource<object> parentTask = GetParentTask(meta.LogUUID);
+            var parentTask = GetParentTask(meta.LogUUID);
 
             parentTask.Task.ContinueWith(parent =>
             {
-                Attachment realAttachment = new Attachment()
+                var realAttachment = new Attachment()
                 {
                     File = attachment.File,
                     MetaData = new AttachmentMetaData()
@@ -368,9 +369,9 @@ namespace Orangebeard.Client.V3
 
                 Task.Run(async () =>
                 {
-                    Guid actualUUID = (Guid)await _client.SendAttachment(realAttachment);
+                    var actualUUID = await _client.SendAttachment(realAttachment);
                     attachmentTask.SetResult(actualUUID);
-                    _guidMap[temporaryUUID] = actualUUID;
+                    _guidMap[temporaryUUID] = (Guid)actualUUID;
                 });
             });
 

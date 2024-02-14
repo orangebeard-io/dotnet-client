@@ -8,7 +8,6 @@ using Orangebeard.Client.V3.Entity.Test;
 using Orangebeard.Client.V3.Entity.TestRun;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -22,7 +21,7 @@ namespace Orangebeard.Client.V3
         private readonly string _endpoint;
         private readonly string _projectName;
         private bool _connectionWithOrangebeardIsValid;
-        protected readonly Guid _accessToken;
+        private readonly Guid _accessToken;
 
         public OrangebeardV3Client(string endpoint, Guid accessToken, string projectName, bool connectionWithOrangebeardIsValid)
         {
@@ -37,7 +36,7 @@ namespace Orangebeard.Client.V3
             _connectionWithOrangebeardIsValid = connectionWithOrangebeardIsValid;
         }
 
-        protected HttpRequestMessage CreateRequest(
+        private HttpRequestMessage CreateRequest(
             HttpMethod method, string url, object content = null, MediaTypeHeaderValue contentType = null)
         {
             if (contentType == null)
@@ -51,12 +50,12 @@ namespace Orangebeard.Client.V3
 
             if (content != null)
             {
-                if(content is MultipartFormDataContent)
+                if(content is MultipartFormDataContent dataContent)
                 {
-                    request.Content = content as MultipartFormDataContent;
+                    request.Content = dataContent;
                 } else
                 {
-                    request.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(content));
+                    request.Content = new StringContent(JsonConvert.SerializeObject(content));
                 }
                 
                 request.Content.Headers.ContentType = contentType;
@@ -68,7 +67,7 @@ namespace Orangebeard.Client.V3
         private void HandleException(Exception e)
         {
             _connectionWithOrangebeardIsValid = false;
-           Console.WriteLine("Coonection failed. Cancelling other orangebeard calls!" + Environment.NewLine + "    " +  e.InnerException.Message);
+           Console.WriteLine("Connection failed. Cancelling other orangebeard calls!" + Environment.NewLine + "    " +  e.InnerException?.Message);
         }
 
         public async Task<Guid?> StartTestRun(StartTestRun testRun)
@@ -102,7 +101,7 @@ namespace Orangebeard.Client.V3
                 try
                 {
                     var request = CreateRequest(HttpMethod.Put, $"test-run/start/{testRunUUID}");
-                    var response = await _restClient.SendAsync(request);
+                    await _restClient.SendAsync(request);
                   
                 }
                 catch (Exception e)
@@ -120,7 +119,7 @@ namespace Orangebeard.Client.V3
                 try
                 {
                     var request = CreateRequest(HttpMethod.Put, $"test-run/finish/{testRunUUID}", finishTestRun);
-                    var response = await _restClient.SendAsync(request);
+                    await _restClient.SendAsync(request);
 
                 }
                 catch (Exception e)
@@ -138,7 +137,7 @@ namespace Orangebeard.Client.V3
                 try
                 {
                     var request = CreateRequest(HttpMethod.Put, $"test-run/update/{testRunUUID}", updateTestRun);
-                    var response = await _restClient.SendAsync(request);
+                    await _restClient.SendAsync(request);
 
                 }
                 catch (Exception e)
@@ -204,7 +203,7 @@ namespace Orangebeard.Client.V3
                 try
                 {
                     var request = CreateRequest(HttpMethod.Put, $"test/finish/{testUUID}", finishTest);
-                    var response = await _restClient.SendAsync(request);
+                    await _restClient.SendAsync(request);
 
                 }
                 catch (Exception e)
@@ -246,7 +245,7 @@ namespace Orangebeard.Client.V3
                 try
                 {
                     var request = CreateRequest(HttpMethod.Put, $"step/finish/{stepUUID}", finishStep);
-                    var response = await _restClient.SendAsync(request);
+                    await _restClient.SendAsync(request);
 
                 }
                 catch (Exception e)
@@ -288,8 +287,7 @@ namespace Orangebeard.Client.V3
                 try
                 {
                     var request = CreateRequest(HttpMethod.Post, $"log/batch", logs);
-                    var response = await _restClient.SendAsync(request);
-
+                    await _restClient.SendAsync(request);
                 }
                 catch (Exception e)
                 {
@@ -309,7 +307,7 @@ namespace Orangebeard.Client.V3
                     MultipartFormDataContent attachmentMessage = new MultipartFormDataContent(mpBoundary);
 
                     var attachmentContent = new ByteArrayContent(attachment.File.Content, 0, attachment.File.Content.Length);
-                    attachmentContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(attachment.File.ContentType);
+                    attachmentContent.Headers.ContentType = new MediaTypeHeaderValue(attachment.File.ContentType);
 
                     var multiPartContentType = new MediaTypeHeaderValue("multipart/form-data")
                     {
@@ -323,7 +321,7 @@ namespace Orangebeard.Client.V3
 
                     var request = CreateRequest(HttpMethod.Post, "attachment", attachmentMessage, multiPartContentType);
 
-                    HttpResponseMessage response = await _restClient.SendAsync(request);
+                    var response = await _restClient.SendAsync(request);
 
                     if (response.IsSuccessStatusCode)
                     {
