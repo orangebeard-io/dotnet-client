@@ -38,7 +38,7 @@ namespace Orangebeard.Client.V3.ClientUtils.Logging
 
         private static readonly object LockObj = new object();
 
-        private static Dictionary<Type, ILogger> _loggers;
+        private static readonly Dictionary<Type, ILogger> _loggers = new Dictionary<Type, ILogger>();
 
         /// <summary>
         /// Gets or creates new logger for requested type.
@@ -48,18 +48,7 @@ namespace Orangebeard.Client.V3.ClientUtils.Logging
         private ILogger GetLogger(Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
-
-            if (_loggers == null)
-            {
-                lock (LockObj)
-                {
-                    if (_loggers == null)
-                    {
-                        _loggers = new Dictionary<Type, ILogger>();
-                    }
-                }
-            }
-
+            
             lock (LockObj)
             {
                 if (_loggers.TryGetValue(type, out var logger)) return logger;
