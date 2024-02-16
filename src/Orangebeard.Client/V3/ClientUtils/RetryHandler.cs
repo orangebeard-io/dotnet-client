@@ -13,9 +13,14 @@ namespace Orangebeard.Client.V3.ClientUtils
             : base(innerHandler)
         {
             _retryPolicy = Policy
-                .HandleResult<HttpResponseMessage>(response => !response.IsSuccessStatusCode)
+                .Handle<HttpRequestException>()
+                .Or<System.Net.Sockets.SocketException>()
+                .OrResult<HttpResponseMessage>(response => !response.IsSuccessStatusCode)
                 .WaitAndRetryAsync(maxRetries, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+                {
+                    Console.WriteLine("Retry attempt {0}/3", retryAttempt);
+                    return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
+                });
         }
 
         protected override async System.Threading.Tasks.Task<HttpResponseMessage> SendAsync(

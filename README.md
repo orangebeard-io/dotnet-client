@@ -28,11 +28,16 @@
 ## Installation
 
 ### Build/Download the dll
+
 ### Set configuration parameters:
- - *orangebeard.endpoint* - You Orangebeard API Url
- - *orangebeard.project* - The project to report to
- - *orangebeard.testset* - The testset name to report
- - *orangebeard.description* - [Optional] The description for the test run
- - *orangebeard.attributes* - [Optional] Attributes to set to the test run
- - *orangebeard.accessToken* - Your API access token
- - *orangebeard.fileupload.patterns* - [Optional] A semicolon-separated list of regular expressions to match when deciding to upload file references from log entries as attachments
+
+- *orangebeard.endpoint* - You Orangebeard API Url
+- *orangebeard.project* - The project to report to
+- *orangebeard.testset* - The testset name to report
+- *orangebeard.description* - [Optional] The description for the test run
+- *orangebeard.attributes* - [Optional] Attributes to set to the test run
+- *orangebeard.accessToken* - Your API access token
+- *orangebeard.fileupload.patterns* - [Optional] A semicolon-separated list of regular expressions to match when
+  deciding to upload file references from log entries as attachments
+- *orangebeard.finishtestruntimeout* - [Optional, default: 60] The max number of seconds to wait for all Orangebeard
+  calls to be processed. 
