@@ -33,8 +33,10 @@ namespace Orangebeard.Client.V3
                 Timeout = TimeSpan.FromMilliseconds(60000)
             };
 
-            var clientIdentification = ".Net client/" + typeof(OrangebeardV3Client).Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            var clientVersion = typeof(OrangebeardV3Client).Assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion.Split('+')[0];
+            
+            var clientIdentification = ".Net client/" + clientVersion;
             var userAgent = listenerPostfix != null
                 ? clientIdentification + " " + listenerPostfix
                 : clientIdentification;
@@ -84,7 +86,7 @@ namespace Orangebeard.Client.V3
 
             Console.WriteLine("Connection failed for {0}.{1}    {2}:{3}", failedMethod,
                 Environment.NewLine, e.InnerException?.GetType().Name, e.InnerException?.Message);
-            
+
             if (!_connectionWithOrangebeardIsValid)
             {
                 Console.Error.WriteLine("Cancelled Orangebeard report!");
@@ -179,7 +181,7 @@ namespace Orangebeard.Client.V3
             }
             catch (Exception e)
             {
-                HandleException(e,"StartSuite", true);
+                HandleException(e, "StartSuite", true);
             }
 
             return new List<Suite>();
