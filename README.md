@@ -39,5 +39,5 @@
 - *orangebeard.accessToken* - Your API access token
 - *orangebeard.fileupload.patterns* - [Optional] A semicolon-separated list of regular expressions to match when
   deciding to upload file references from log entries as attachments
-- *orangebeard.finishtestruntimeout* - [Optional, default: 60] The max number of seconds to wait for all Orangebeard
+- *orangebeard.finishtestruntimeout* - [Optional, default: 300] The max number of seconds to wait for all Orangebeard
   calls to be processed. 

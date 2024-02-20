@@ -13,29 +13,31 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Orangebeard.Client.V3.ClientUtils.Logging;
 
 namespace Orangebeard.Client.V3
 {
     internal class OrangebeardV3Client
     {
+        private static readonly ILogger Logger = LogManager.Instance.GetLogger<OrangebeardV3Client>();
         private readonly HttpClient _restClient;
         private readonly string _endpoint;
         private readonly string _projectName;
         private bool _connectionWithOrangebeardIsValid;
         private readonly Guid _accessToken;
-        private int _failCount;
 
         public OrangebeardV3Client(string endpoint, Guid accessToken, string projectName,
             bool connectionWithOrangebeardIsValid, string listenerPostfix = null)
         {
             _restClient = new HttpClient(new RetryHandler(new HttpClientHandler()))
             {
-                Timeout = TimeSpan.FromMilliseconds(60000)
+                Timeout = TimeSpan.FromMinutes(5)
             };
 
             var clientVersion = typeof(OrangebeardV3Client).Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion.Split('+')[0];
-            
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                ?.InformationalVersion.Split('+')[0];
+
             var clientIdentification = ".Net client/" + clientVersion;
             var userAgent = listenerPostfix != null
                 ? clientIdentification + " " + listenerPostfix
@@ -79,18 +81,10 @@ namespace Orangebeard.Client.V3
             return request;
         }
 
-        private void HandleException(Exception e, string failedMethod, bool forceCancel = false)
+        private static void HandleException(Exception e, string failedMethod)
         {
-            _failCount++;
-            _connectionWithOrangebeardIsValid = _failCount < 20 && !forceCancel;
-
-            Console.WriteLine("Connection failed for {0}.{1}    {2}:{3}", failedMethod,
-                Environment.NewLine, e.InnerException?.GetType().Name, e.InnerException?.Message);
-
-            if (!_connectionWithOrangebeardIsValid)
-            {
-                Console.Error.WriteLine("Cancelled Orangebeard report!");
-            }
+            Logger.Error(
+                $"[ORANGEBEARD] Connection failed for {failedMethod}.{Environment.NewLine}    {e.GetType().Name}:{e.Message}");
         }
 
         public async Task<Guid?> StartTestRun(StartTestRun testRun)
@@ -110,7 +104,8 @@ namespace Orangebeard.Client.V3
             }
             catch (Exception e)
             {
-                HandleException(e, "StartTestRun", true);
+                HandleException(e, "StartTestRun");
+                _connectionWithOrangebeardIsValid = false;
             }
 
             return null;
@@ -127,7 +122,7 @@ namespace Orangebeard.Client.V3
                 }
                 catch (Exception e)
                 {
-                    HandleException(e, "StartAnnounced", true);
+                    HandleException(e, "StartAnnounced");
                 }
             }
         }
@@ -181,7 +176,7 @@ namespace Orangebeard.Client.V3
             }
             catch (Exception e)
             {
-                HandleException(e, "StartSuite", true);
+                HandleException(e, "StartSuite");
             }
 
             return new List<Suite>();

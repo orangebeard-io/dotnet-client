@@ -99,7 +99,7 @@ namespace Orangebeard.Client.V3
             Console.WriteLine("Waiting for {0}/{1} Orangebeard calls to finish...", pendingTasks, _tasks.Count);
 
             var timeoutInSeconds =
-                int.Parse(Environment.GetEnvironmentVariable("orangebeard.finishtestruntimeout") ?? "60");
+                int.Parse(Environment.GetEnvironmentVariable("orangebeard.finishtestruntimeout") ?? "300");
             
             var timeout = TimeSpan.FromSeconds(timeoutInSeconds);
             var completed = Task.WhenAll(_tasks.Values.Select(task => task.Task).ToArray()).Wait(timeout);
@@ -137,7 +137,7 @@ namespace Orangebeard.Client.V3
                 else
                 {
                     testRunUuid = _guidMap[startSuite.TestRunUUID];
-                    parentSuiteUuid = parent.Result is List<Guid> list ? list.Last() : (Guid)parent.Result;
+                    parentSuiteUuid = parent.Result is List<Guid> list ? list[list.Count -1] : (Guid)parent.Result;
                 }
 
                 var realStartSuite = new StartSuite()
@@ -172,7 +172,8 @@ namespace Orangebeard.Client.V3
 
             parentTask.Task.ContinueWith(parent =>
             {
-                var parentSuiteUuid = ((List<Guid>)parent.Result).Last();
+                var parentUuids = (List<Guid>)parent.Result;
+                var parentSuiteUuid = parentUuids[parentUuids.Count -1];
                 var realStartTest = new StartTest()
                 {
                     TestRunUUID = _guidMap[startTest.TestRunUUID],
