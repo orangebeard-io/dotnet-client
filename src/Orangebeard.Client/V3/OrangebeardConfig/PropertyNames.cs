@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Orangebeard.Client.V3.OrangebeardConfig
+﻿namespace Orangebeard.Client.V3.OrangebeardConfig
 {
     static class PropertyNames
     {

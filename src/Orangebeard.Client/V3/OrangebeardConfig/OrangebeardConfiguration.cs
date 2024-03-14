@@ -55,6 +55,7 @@ namespace Orangebeard.Client.V3.OrangebeardConfig
         public OrangebeardConfiguration()
         {
             FileUploadPatterns = new List<string>();
+            Attributes = new HashSet<Attribute>();
             ReadPropertyFile(ORANGEBEARD_PROPERTY_FILE);
             ReadJsonConfigFile(ORANGEBEARD_JSON_CONFIG_FILE);
             ReadEnvironmentVariables(".");
@@ -139,7 +140,7 @@ namespace Orangebeard.Client.V3.OrangebeardConfig
             if (jsonProperties.Count == 0) return;
             foreach (var property in jsonProperties)
             {
-                switch (property.Key)
+                switch ("orangebeard." + property.Key)
                 {
                     case ORANGEBEARD_ENDPOINT:
                         Endpoint = property.Value.ToString();
