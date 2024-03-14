@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using static Orangebeard.Client.V3.OrangebeardConfig.PropertyNames;
 using Attribute = Orangebeard.Client.V3.Entity.Attribute;
 
@@ -23,10 +24,12 @@ namespace Orangebeard.Client.V3.OrangebeardConfig
             ReadPropertyFile(propertyFile);
             ReadEnvironmentVariables(".");
             ReadEnvironmentVariables("_");
-            if(!RequiredPropertiesArePresent())
+            if (!RequiredPropertiesArePresent())
             {
-                throw new OrangebeardConfigurationException("Not all required configuration properties (Endpoint, AccessToken, ProjectName, TestSetName) are present!");
+                throw new OrangebeardConfigurationException(
+                    "Not all required configuration properties (Endpoint, AccessToken, ProjectName, TestSetName) are present!");
             }
+
             ProjectName = ProjectName.ToLower();
         }
 
@@ -37,17 +40,24 @@ namespace Orangebeard.Client.V3.OrangebeardConfig
             ProjectName = config.GetValue<string>(ConfigurationPath.ServerProject);
             TestSetName = config.GetValue<string>(ConfigurationPath.TestSetName);
             Description = config.GetValue<string>(ConfigurationPath.TestSetDescription);
-            Attributes = new HashSet<Attribute>(config.GetKeyValues(ConfigurationPath.Attributes, new HashSet<KeyValuePair<string, string>>()).Select(a => new Attribute { Key = a.Key, Value = a.Value }).ToList());
+            Attributes = new HashSet<Attribute>(config
+                .GetKeyValues(ConfigurationPath.Attributes, new HashSet<KeyValuePair<string, string>>())
+                .Select(a => new Attribute { Key = a.Key, Value = a.Value }).ToList());
             if (!RequiredPropertiesArePresent())
             {
-                throw new OrangebeardConfigurationException("Not all required configuration properties (Endpoint, AccessToken, ProjectName, TestSetName) are present!");
+                throw new OrangebeardConfigurationException(
+                    "Not all required configuration properties (Endpoint, AccessToken, ProjectName, TestSetName) are present!");
             }
+
             ProjectName = ProjectName.ToLower();
         }
 
         public OrangebeardConfiguration()
         {
+            FileUploadPatterns = new List<string>();
+            Attributes = new HashSet<Attribute>();
             ReadPropertyFile(ORANGEBEARD_PROPERTY_FILE);
+            ReadJsonConfigFile(ORANGEBEARD_JSON_CONFIG_FILE);
             ReadEnvironmentVariables(".");
             ReadEnvironmentVariables("_");
             ProjectName = ProjectName.ToLower();
@@ -70,69 +80,149 @@ namespace Orangebeard.Client.V3.OrangebeardConfig
             {
                 Endpoint = Environment.GetEnvironmentVariable(ORANGEBEARD_ENDPOINT.Replace(".", separator));
             }
+
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_ACCESS_TOKEN.Replace(".", separator)) != null)
             {
                 AccessToken = Environment.GetEnvironmentVariable(ORANGEBEARD_ACCESS_TOKEN.Replace(".", separator));
             }
+
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_PROJECT.Replace(".", separator)) != null)
             {
                 ProjectName = Environment.GetEnvironmentVariable(ORANGEBEARD_PROJECT.Replace(".", separator));
             }
+
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_TESTSET.Replace(".", separator)) != null)
             {
                 TestSetName = Environment.GetEnvironmentVariable(ORANGEBEARD_TESTSET.Replace(".", separator));
             }
+
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_DESCRIPTION.Replace(".", separator)) != null)
             {
                 Description = Environment.GetEnvironmentVariable(ORANGEBEARD_DESCRIPTION.Replace(".", separator));
             }
+
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_ATTRIBUTES.Replace(".", separator)) != null)
             {
-                Attributes = ExtractAttributes(Environment.GetEnvironmentVariable(ORANGEBEARD_ATTRIBUTES.Replace(".", separator)));
+                Attributes =
+                    ExtractAttributes(
+                        Environment.GetEnvironmentVariable(ORANGEBEARD_ATTRIBUTES.Replace(".", separator)));
             }
+
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_REF_URL.Replace(".", separator)) != null)
             {
-                var ref_url_attribute = new Attribute { Key = "reference_url", Value = Environment.GetEnvironmentVariable(ORANGEBEARD_REF_URL.Replace(".", separator)) };
-                
+                var refUrlAttribute = new Attribute
+                {
+                    Key = "reference_url",
+                    Value = Environment.GetEnvironmentVariable(ORANGEBEARD_REF_URL.Replace(".", separator))
+                };
+
                 if (Attributes == null)
                 {
-                    Attributes = new HashSet<Attribute> { ref_url_attribute };
+                    Attributes = new HashSet<Attribute> { refUrlAttribute };
                 }
                 else
                 {
-                    Attributes.Add(ref_url_attribute);
+                    Attributes.Add(refUrlAttribute);
                 }
             }
+
             if (Environment.GetEnvironmentVariable(ORANGEBEARD_FILEUPLOAD_PATTERNS.Replace(".", separator)) != null)
             {
-                string patternList = Environment.GetEnvironmentVariable(ORANGEBEARD_FILEUPLOAD_PATTERNS.Replace(".", separator));
-                FileUploadPatterns = new List<string>(patternList.Split(';')); 
+                string patternList =
+                    Environment.GetEnvironmentVariable(ORANGEBEARD_FILEUPLOAD_PATTERNS.Replace(".", separator));
+                FileUploadPatterns = new List<string>(patternList.Split(';'));
             }
+        }
+
+        private void ReadJsonConfigFile(string jsonFileName)
+        {
+            var jsonProperties = GetJsonConfig(jsonFileName);
+            if (jsonProperties.Count == 0) return;
+            foreach (var property in jsonProperties)
+            {
+                switch ("orangebeard." + property.Key)
+                {
+                    case ORANGEBEARD_ENDPOINT:
+                        Endpoint = property.Value.ToString();
+                        break;
+                    case ORANGEBEARD_ACCESS_TOKEN:
+                        AccessToken = property.Value.ToString();
+                        break;
+                    case ORANGEBEARD_PROJECT:
+                        ProjectName = property.Value.ToString();
+                        break;
+                    case ORANGEBEARD_TESTSET:
+                        TestSetName = property.Value.ToString();
+                        break;
+                    case ORANGEBEARD_DESCRIPTION:
+                        Description = property.Value.ToString();
+                        break;
+                    case ORANGEBEARD_ATTRIBUTES:
+                        GetAttributesFromJsonArray((JArray)property.Value);
+                        break;
+                    case ORANGEBEARD_FILEUPLOAD_PATTERNS:
+                        ((List<string>)FileUploadPatterns).AddRange(
+                            ((JArray)property.Value).ToObject<List<string>>());
+                        break;
+                    case ORANGEBEARD_REF_URL:
+                        Attributes.Add(new Attribute { Key = "reference_url", Value = property.Value.ToString() });
+                        break;
+                }
+            }
+        }
+
+        private static Dictionary<string, object> GetJsonConfig(string jsonFileName)
+        {
+            var currentDir = Directory.GetCurrentDirectory();
+            while (currentDir != null)
+            {
+                var filePath = Path.Combine(currentDir, jsonFileName);
+                if (File.Exists(filePath))
+                {
+                    try
+                    {
+                        var content = File.ReadAllText(filePath);
+                        var jsonObject = JObject.Parse(content);
+                        return jsonObject.ToObject<Dictionary<string, object>>();
+                    }
+                    catch (IOException)
+                    {
+                        return new Dictionary<string, object>();
+                    }
+                }
+
+                currentDir = Directory.GetParent(currentDir)?.FullName;
+            }
+
+            return new Dictionary<string, object>();
         }
 
         private void ReadPropertyFile(string propertyFile)
         {
-            IDictionary<string, string> properties;
             try
             {
+                IDictionary<string, string> properties;
                 using (TextReader reader = new StreamReader(propertyFile))
                 {
                     properties = PropertyFileLoader.Load(reader);
                 }
+
                 Endpoint = GetValueOrNull(properties, ORANGEBEARD_ENDPOINT);
                 AccessToken = GetValueOrNull(properties, ORANGEBEARD_ACCESS_TOKEN);
                 ProjectName = GetValueOrNull(properties, ORANGEBEARD_PROJECT);
                 TestSetName = GetValueOrNull(properties, ORANGEBEARD_TESTSET);
                 Description = GetValueOrNull(properties, ORANGEBEARD_DESCRIPTION);
                 Attributes = ExtractAttributes(GetValueOrNull(properties, ORANGEBEARD_ATTRIBUTES));
-                FileUploadPatterns = new List<string>(GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS).Split(';'));
+                FileUploadPatterns =
+                    new List<string>(GetValueOrNull(properties, ORANGEBEARD_FILEUPLOAD_PATTERNS).Split(';'));
 
                 if (GetValueOrNull(properties, ORANGEBEARD_REF_URL) != null)
                 {
-                    Attributes.Add(new Attribute { Key = "reference_url", Value = GetValueOrNull(properties, ORANGEBEARD_REF_URL) });
+                    Attributes.Add(new Attribute
+                        { Key = "reference_url", Value = GetValueOrNull(properties, ORANGEBEARD_REF_URL) });
                 }
-
-            } catch (FileNotFoundException)
+            }
+            catch (FileNotFoundException)
             {
                 //ignore
             }
@@ -163,11 +253,27 @@ namespace Orangebeard.Client.V3.OrangebeardConfig
         }
 
 
-        private string GetValueOrNull(IDictionary<string, string> dict, string key)
+        private static string GetValueOrNull(IDictionary<string, string> dict, string key)
         {
-            dict.TryGetValue(key, out string result);
+            dict.TryGetValue(key, out var result);
             return result;
         }
-    }
 
+        private void GetAttributesFromJsonArray(JArray attrs)
+        {
+            foreach (var attr in attrs)
+            {
+                var attribute = (JObject)attr;
+                if (attribute.Value<string>("key") != null)
+                {
+                    Attributes.Add(new Attribute(attribute.Value<string>("key"),
+                        attribute.Value<string>("value")));
+                }
+                else
+                {
+                    Attributes.Add(new Attribute(attribute.Value<string>("value")));
+                }
+            }
+        }
+    }
 }

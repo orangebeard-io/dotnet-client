@@ -39,11 +39,11 @@ namespace Orangebeard.Client.V3.OrangebeardConfig
             var trueValues = new List<string> { "true", "yes", "y", "1" };
             var falseValues = new List<string> { "false", "no", "n", "0" };
 
-            if (trueValues.Any(v => propertyValue.ToString().ToLowerInvariant() == v))
+            if (trueValues.Exists(v => propertyValue.ToString().ToLowerInvariant() == v))
             {
                 return (T)(object)true;
             }
-            else if (falseValues.Any(v => propertyValue.ToString().ToLowerInvariant() == v))
+            else if (falseValues.Exists(v => propertyValue.ToString().ToLowerInvariant() == v))
             {
                 return (T)(object)false;
             }

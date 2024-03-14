@@ -19,7 +19,7 @@ namespace Orangebeard.Client.V3.OrangebeardConfig
         {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
 
-            builder.AddJsonFile(Path.Combine(baseDir, "Orangebeard.config.json"), optional: true);
+            builder.AddJsonFile(Path.Combine(baseDir, "orangebeard.json"), optional: true);
             builder.AddDirectoryProbing(baseDir);
             builder.AddEnvironmentVariables();
 
