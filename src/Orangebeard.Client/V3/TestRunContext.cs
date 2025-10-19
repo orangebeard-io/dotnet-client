@@ -63,9 +63,9 @@ namespace Orangebeard.Client.V3
         {
             activeSuiteIds.Remove(suiteId);
         }
-        public Guid ActiveSuite()
+        public Guid? ActiveSuite()
         {
-            return activeSuiteIds.ElementAtOrDefault(activeSuiteIds.Count - 1);
+            return activeSuiteIds.Count > 0 ? (Guid?)activeSuiteIds[activeSuiteIds.Count - 1] : null;
         }
 
         public Guid? ActiveTest()
